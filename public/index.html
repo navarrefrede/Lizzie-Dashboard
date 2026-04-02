@@ -571,14 +571,10 @@
 </div>
 
 <script>
-  const BASE_ID = 'appoYAY87ApVe74NH';
-  const PAT = 'pat9lri6d1F9VG7NP';
-  const API = `https://api.airtable.com/v0/${BASE_ID}`;
-
   const TABLES = {
-    appointments: 'tblYoE6gqRzz8HXzh',
-    tasks: 'tblpvGShoT1jSFiYA',
-    classes: 'tblFjSCv9YnACEd4q'
+    appointments: 'appointments',
+    tasks: 'tasks',
+    classes: 'classes'
   };
 
   const FIELDS = {
@@ -616,15 +612,13 @@
   // Data store
   let data = { appointments: [], tasks: [], classes: [] };
 
-  // Fetch directly from Airtable API with field IDs as keys
-  async function fetchTable(tableId) {
-    const res = await fetch(`${API}/${tableId}?returnFieldsByFieldId=true`, {
-      headers: { 'Authorization': `Bearer ${PAT}` }
-    });
+  // Fetch via Netlify serverless function (avoids CORS, keeps token server-side)
+  async function fetchTable(tableName) {
+    const res = await fetch(`/.netlify/functions/airtable?table=${tableName}`);
     if (!res.ok) {
       const errText = await res.text();
-      console.error(`Airtable error ${res.status} for ${tableId}:`, errText);
-      throw new Error(`Airtable error: ${res.status}`);
+      console.error(`Function error ${res.status} for ${tableName}:`, errText);
+      throw new Error(`Function error: ${res.status}`);
     }
     const json = await res.json();
     return json.records || [];
