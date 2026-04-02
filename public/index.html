@@ -616,9 +616,9 @@
   // Data store
   let data = { appointments: [], tasks: [], classes: [] };
 
-  // Fetch directly from Airtable API (supports CORS with Bearer token)
+  // Fetch directly from Airtable API with field IDs as keys
   async function fetchTable(tableId) {
-    const res = await fetch(`${API}/${tableId}`, {
+    const res = await fetch(`${API}/${tableId}?returnFieldsByFieldId=true`, {
       headers: { 'Authorization': `Bearer ${PAT}` }
     });
     if (!res.ok) {
