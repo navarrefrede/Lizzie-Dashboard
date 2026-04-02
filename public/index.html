@@ -185,6 +185,66 @@
 
   .card-body { padding: 16px 22px 20px; }
 
+  /* Calendar navigation */
+  .cal-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .cal-nav-btn {
+    background: var(--pearl);
+    border: 1px solid var(--soft-pink);
+    color: var(--deep-rose);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .cal-nav-btn:hover {
+    background: var(--blush);
+    border-color: var(--rose);
+    color: var(--white);
+  }
+
+  .cal-nav-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    min-width: 160px;
+    text-align: center;
+  }
+
+  .cal-today-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--deep-rose);
+    background: var(--pearl);
+    border: 1px solid var(--soft-pink);
+    padding: 3px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+
+  .cal-today-btn:hover {
+    background: var(--blush);
+    color: var(--white);
+  }
+
   /* Calendar */
   .calendar-grid {
     display: grid;
@@ -255,14 +315,26 @@
 
   /* Appointment list */
   .appt-item {
-    display: flex;
-    gap: 14px;
     padding: 14px 0;
     border-bottom: 1px solid rgba(248,196,212,0.15);
-    align-items: flex-start;
+    cursor: pointer;
+    transition: background 0.2s;
   }
 
   .appt-item:last-child { border-bottom: none; }
+
+  .appt-item:hover {
+    background: var(--lace);
+    margin: 0 -22px;
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .appt-item-top {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
 
   .appt-date-badge {
     flex-shrink: 0;
@@ -326,6 +398,50 @@
     border-radius: 8px;
   }
 
+  .appt-expand-icon {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    transition: transform 0.3s;
+    align-self: center;
+  }
+
+  .appt-item.expanded .appt-expand-icon {
+    transform: rotate(180deg);
+  }
+
+  .appt-notes {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    margin-left: 64px;
+    margin-right: 10px;
+  }
+
+  .appt-item.expanded .appt-notes {
+    max-height: 300px;
+    padding-top: 10px;
+  }
+
+  .appt-notes-inner {
+    background: var(--pearl);
+    border: 1px solid var(--soft-pink);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.78rem;
+    color: var(--text-medium);
+    line-height: 1.5;
+  }
+
+  .appt-notes-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--deep-rose);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
   .status-pill {
     font-size: 0.65rem;
     font-weight: 600;
@@ -333,6 +449,7 @@
     border-radius: 10px;
     letter-spacing: 0.03em;
     white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .status-scheduled { background: var(--pearl); color: var(--deep-rose); border: 1px solid var(--soft-pink); }
@@ -363,16 +480,31 @@
     transition: all 0.2s;
   }
 
+  .task-check:hover {
+    border-color: var(--rose);
+    background: var(--pearl);
+  }
+
   .task-check.done {
     background: var(--rose);
     border-color: var(--rose);
   }
 
   .task-check.done::after {
-    content: '✓';
+    content: '\2713';
     color: white;
     font-size: 0.65rem;
     font-weight: 700;
+  }
+
+  .task-check.saving {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .task-item.completed-task .task-name {
+    text-decoration: line-through;
+    color: var(--text-light);
   }
 
   .task-info { flex: 1; min-width: 0; }
@@ -381,6 +513,7 @@
     font-weight: 500;
     font-size: 0.88rem;
     color: var(--text-dark);
+    transition: all 0.3s;
   }
 
   .task-info .task-meta {
@@ -421,7 +554,7 @@
   }
 
   .empty-state::before {
-    content: '♡';
+    content: '\2661';
     display: block;
     font-size: 1.5rem;
     margin-bottom: 8px;
@@ -443,33 +576,17 @@
     100% { background-position: -200% 0; }
   }
 
-  /* Bow decoration */
-  .bow {
-    display: inline-block;
-    position: relative;
-    width: 24px;
-    height: 12px;
-  }
-
-  .bow::before, .bow::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    width: 12px;
-    height: 12px;
-    border-radius: 50% 50% 50% 0;
-    background: var(--blush);
-  }
-
-  .bow::before { left: 0; transform: rotate(-45deg); }
-  .bow::after { right: 0; transform: rotate(45deg) scaleX(-1); }
-
   /* Responsive */
   @media (max-width: 768px) {
     .grid { grid-template-columns: 1fr; }
     .card-calendar { grid-column: 1; }
     .header h1 { font-size: 1.8rem; }
     .dashboard { padding: 20px 14px; }
+    .appt-item:hover {
+      margin: 0;
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 
   /* Scroll */
@@ -499,6 +616,31 @@
     color: var(--deep-rose);
     border-color: var(--rose);
   }
+
+  /* Toast notification */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--text-dark);
+    color: var(--white);
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-family: 'DM Sans', sans-serif;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    transition: transform 0.35s ease;
+    z-index: 100;
+  }
+
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .toast.toast-error {
+    background: var(--deep-rose);
+  }
 </style>
 </head>
 <body>
@@ -514,14 +656,20 @@
     </div>
   </header>
 
-  <!-- Calendar -->
   <div class="grid">
+    <!-- Calendar -->
     <div class="card card-calendar">
       <div class="card-header">
-        <h2><span class="icon">🗓</span> This Week</h2>
+        <h2><span class="icon">🗓</span> Weekly View</h2>
         <span class="badge" id="weekRange"></span>
       </div>
       <div class="card-body">
+        <div class="cal-nav">
+          <button class="cal-nav-btn" onclick="changeWeek(-1)" title="Previous week">‹</button>
+          <span class="cal-nav-label" id="calNavLabel"></span>
+          <button class="cal-nav-btn" onclick="changeWeek(1)" title="Next week">›</button>
+          <button class="cal-today-btn" onclick="goToday()">Today</button>
+        </div>
         <div class="calendar-grid" id="calendarGrid"></div>
         <div style="display:flex; gap:16px; justify-content:center; margin-top:12px; padding-top:10px; border-top:1px solid rgba(248,196,212,0.2);">
           <span style="display:flex;align-items:center;gap:5px;font-size:0.68rem;color:var(--text-light)"><span style="width:8px;height:8px;border-radius:3px;background:var(--rose);display:inline-block"></span> Appointments</span>
@@ -570,6 +718,9 @@
   </div>
 </div>
 
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
 <script>
   const TABLES = {
     appointments: 'appointments',
@@ -611,8 +762,17 @@
 
   // Data store
   let data = { appointments: [], tasks: [], classes: [] };
+  let weekOffset = 0;
 
-  // Fetch via Netlify serverless function (avoids CORS, keeps token server-side)
+  // Toast notification
+  function showToast(message, isError = false) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = 'toast show' + (isError ? ' toast-error' : '');
+    setTimeout(() => { toast.className = 'toast'; }, 2500);
+  }
+
+  // Fetch via Netlify serverless function
   async function fetchTable(tableName) {
     const res = await fetch(`/.netlify/functions/airtable?table=${tableName}`);
     if (!res.ok) {
@@ -624,12 +784,27 @@
     return json.records || [];
   }
 
+  // Update a record via PATCH
+  async function updateRecord(tableName, recordId, fields) {
+    const res = await fetch('/.netlify/functions/airtable', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ table: tableName, recordId, fields })
+    });
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error(`Update error ${res.status}:`, errText);
+      throw new Error(`Update error: ${res.status}`);
+    }
+    return await res.json();
+  }
+
   // Get field value helper
   function fv(record, fieldId) {
     return record.fields?.[fieldId] ?? null;
   }
 
-  // Format date
+  // Format helpers
   function formatDate(dateStr) {
     if (!dateStr) return '';
     const d = new Date(dateStr);
@@ -649,6 +824,11 @@
       month: d.toLocaleDateString('en-US', { month: 'short' }),
       day: d.getDate()
     };
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
   // Status class
@@ -672,7 +852,6 @@
     return val;
   }
 
-  // Priority class
   function priorityClass(p) {
     if (!p) return 'priority-low';
     const name = selectName(p).toLowerCase();
@@ -681,20 +860,37 @@
     return 'priority-low';
   }
 
-  // Build calendar
+  // ============ CALENDAR WITH WEEK NAVIGATION ============
+
+  function changeWeek(direction) {
+    weekOffset += direction;
+    buildCalendar(data.appointments, data.tasks, data.classes);
+  }
+
+  function goToday() {
+    weekOffset = 0;
+    buildCalendar(data.appointments, data.tasks, data.classes);
+  }
+
   function buildCalendar(appointments, tasks, classes) {
     const now = new Date();
     const startOfWeek = new Date(now);
-    const dayOfWeek = now.getDay();
-    startOfWeek.setDate(now.getDate() - dayOfWeek);
+    startOfWeek.setDate(now.getDate() - now.getDay() + (weekOffset * 7));
     startOfWeek.setHours(0, 0, 0, 0);
 
     const endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(startOfWeek.getDate() + 6);
     endOfWeek.setHours(23, 59, 59, 999);
 
-    document.getElementById('weekRange').textContent =
-      `${startOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${endOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+    const rangeText = `${startOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${endOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+    document.getElementById('weekRange').textContent = rangeText;
+
+    // Nav label
+    let navLabel = rangeText;
+    if (weekOffset === 0) navLabel = 'This Week';
+    else if (weekOffset === -1) navLabel = 'Last Week';
+    else if (weekOffset === 1) navLabel = 'Next Week';
+    document.getElementById('calNavLabel').textContent = navLabel;
 
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     let html = days.map(d => `<div class="cal-day-name">${d}</div>`).join('');
@@ -704,21 +900,18 @@
       day.setDate(startOfWeek.getDate() + i);
       const isToday = day.toDateString() === now.toDateString();
 
-      // Find appointments on this day
       const dayAppts = appointments.filter(a => {
         const dt = fv(a, FIELDS.appointments.dateTime);
         if (!dt) return false;
         return new Date(dt).toDateString() === day.toDateString();
       });
 
-      // Find tasks due this day
       const dayTasks = tasks.filter(t => {
         const dt = fv(t, FIELDS.tasks.dueDate);
         if (!dt) return false;
         return new Date(dt).toDateString() === day.toDateString();
       });
 
-      // Find class assignments due this day
       const dayClasses = classes.filter(c => {
         const dt = fv(c, FIELDS.classes.dueDate);
         if (!dt) return false;
@@ -730,25 +923,22 @@
 
       let dots = '';
 
-      // Appointment dots
       dots += dayAppts.map(a => {
         const time = formatTime(fv(a, FIELDS.appointments.dateTime));
         const doctor = fv(a, FIELDS.appointments.doctor) || '';
-        return `<div class="appt-dot dot-appt" title="${doctor} at ${time}">🩺 ${time}</div>`;
+        return `<div class="appt-dot dot-appt" title="${escapeHtml(doctor)} at ${time}">🩺 ${time}</div>`;
       }).join('');
 
-      // Task dots
       dots += dayTasks.map(t => {
         const name = fv(t, FIELDS.tasks.name) || 'Task';
         const short = name.length > 12 ? name.slice(0, 12) + '…' : name;
-        return `<div class="appt-dot dot-task" title="${name}">✧ ${short}</div>`;
+        return `<div class="appt-dot dot-task" title="${escapeHtml(name)}">✧ ${escapeHtml(short)}</div>`;
       }).join('');
 
-      // Class assignment dots
       dots += dayClasses.map(c => {
         const name = fv(c, FIELDS.classes.name) || 'Assignment';
         const short = name.length > 12 ? name.slice(0, 12) + '…' : name;
-        return `<div class="appt-dot dot-class" title="${name}">📚 ${short}</div>`;
+        return `<div class="appt-dot dot-class" title="${escapeHtml(name)}">📚 ${escapeHtml(short)}</div>`;
       }).join('');
 
       html += `<div class="${cls}"><span class="day-num">${day.getDate()}</span>${dots}</div>`;
@@ -757,7 +947,12 @@
     document.getElementById('calendarGrid').innerHTML = html;
   }
 
-  // Render appointments
+  // ============ EXPANDABLE APPOINTMENTS ============
+
+  function toggleAppt(el) {
+    el.classList.toggle('expanded');
+  }
+
   function renderAppointments(records) {
     const el = document.getElementById('apptList');
     document.getElementById('apptCount').textContent = records.length;
@@ -767,7 +962,6 @@
       return;
     }
 
-    // Sort by date
     records.sort((a, b) => {
       const da = fv(a, FIELDS.appointments.dateTime) || '';
       const db = fv(b, FIELDS.appointments.dateTime) || '';
@@ -782,26 +976,79 @@
       const time = formatTime(fv(r, FIELDS.appointments.dateTime));
       const status = fv(r, FIELDS.appointments.status);
       const type = fv(r, FIELDS.appointments.type);
+      const notes = fv(r, FIELDS.appointments.notes) || '';
+      const hasNotes = notes.trim().length > 0;
 
       return `
-        <div class="appt-item">
-          <div class="appt-date-badge">
-            <span class="month">${month}</span>
-            <span class="day">${day}</span>
+        <div class="appt-item${hasNotes ? '' : ' no-notes'}" onclick="${hasNotes ? 'toggleAppt(this)' : ''}">
+          <div class="appt-item-top">
+            <div class="appt-date-badge">
+              <span class="month">${month}</span>
+              <span class="day">${day}</span>
+            </div>
+            <div class="appt-info">
+              <div class="name">${escapeHtml(selectName(type) || 'Appointment')} – ${escapeHtml(doctor.split(',')[0])}</div>
+              <div class="doctor">${escapeHtml(doctor)}</div>
+              <div class="location">${escapeHtml(location)}</div>
+              <div class="time">♡ ${time}</div>
+            </div>
+            <span class="status-pill ${statusClass(status)}">${statusName(status)}</span>
+            ${hasNotes ? '<span class="appt-expand-icon">▼</span>' : ''}
           </div>
-          <div class="appt-info">
-            <div class="name">${selectName(type) || 'Appointment'} – ${doctor.split(',')[0]}</div>
-            <div class="doctor">${doctor}</div>
-            <div class="location">${location}</div>
-            <div class="time">♡ ${time}</div>
-          </div>
-          <span class="status-pill ${statusClass(status)}">${statusName(status)}</span>
+          ${hasNotes ? `
+          <div class="appt-notes">
+            <div class="appt-notes-inner">
+              <div class="appt-notes-label">Notes</div>
+              ${escapeHtml(notes)}
+            </div>
+          </div>` : ''}
         </div>
       `;
     }).join('');
   }
 
-  // Render tasks
+  // ============ TASKS WITH CHECKBOX SYNC ============
+
+  async function toggleTask(checkbox, recordId, currentState) {
+    const newState = !currentState;
+    const taskItem = checkbox.closest('.task-item');
+
+    // Optimistic UI update
+    checkbox.classList.add('saving');
+    if (newState) {
+      checkbox.classList.add('done');
+      taskItem.classList.add('completed-task');
+    } else {
+      checkbox.classList.remove('done');
+      taskItem.classList.remove('completed-task');
+    }
+
+    try {
+      await updateRecord('tasks', recordId, {
+        [FIELDS.tasks.completed]: newState
+      });
+
+      checkbox.classList.remove('saving');
+      showToast(newState ? '✓ Task completed!' : 'Task unchecked');
+
+      // Update local data
+      const rec = data.tasks.find(t => t.id === recordId);
+      if (rec) rec.fields[FIELDS.tasks.completed] = newState;
+
+    } catch (err) {
+      // Revert on error
+      checkbox.classList.remove('saving');
+      if (newState) {
+        checkbox.classList.remove('done');
+        taskItem.classList.remove('completed-task');
+      } else {
+        checkbox.classList.add('done');
+        taskItem.classList.add('completed-task');
+      }
+      showToast('Failed to update — try again', true);
+    }
+  }
+
   function renderTasks(records) {
     const el = document.getElementById('taskList');
     document.getElementById('taskCount').textContent = records.length;
@@ -810,6 +1057,16 @@
       el.innerHTML = '<div class="empty-state">No tasks right now — free time!</div>';
       return;
     }
+
+    // Sort: incomplete first, then by due date
+    records.sort((a, b) => {
+      const aDone = fv(a, FIELDS.tasks.completed) ? 1 : 0;
+      const bDone = fv(b, FIELDS.tasks.completed) ? 1 : 0;
+      if (aDone !== bDone) return aDone - bDone;
+      const da = fv(a, FIELDS.tasks.dueDate) || '9999';
+      const db = fv(b, FIELDS.tasks.dueDate) || '9999';
+      return new Date(da) - new Date(db);
+    });
 
     el.innerHTML = records.map(r => {
       const name = fv(r, FIELDS.tasks.name) || 'Task';
@@ -820,15 +1077,16 @@
       const completed = fv(r, FIELDS.tasks.completed);
 
       const cats = (Array.isArray(categories) ? categories : [categories])
-        .map(c => `<span class="category-tag">${selectName(c)}</span>`).join('');
+        .filter(Boolean)
+        .map(c => `<span class="category-tag">${escapeHtml(selectName(c))}</span>`).join('');
 
       return `
-        <div class="task-item">
-          <div class="task-check ${completed ? 'done' : ''}"></div>
+        <div class="task-item ${completed ? 'completed-task' : ''}">
+          <div class="task-check ${completed ? 'done' : ''}" onclick="toggleTask(this, '${r.id}', ${!!completed})"></div>
           <div class="task-info">
-            <div class="task-name">${name}</div>
+            <div class="task-name">${escapeHtml(name)}</div>
             <div class="task-meta">
-              ${priority ? `<span><span class="priority-dot ${priorityClass(priority)}"></span> ${selectName(priority)}</span>` : ''}
+              ${priority ? `<span><span class="priority-dot ${priorityClass(priority)}"></span> ${escapeHtml(selectName(priority))}</span>` : ''}
               ${dueDate ? `<span>Due ${formatDate(dueDate)}</span>` : ''}
               ${statusName(status) !== 'No Status' ? `<span>${statusName(status)}</span>` : ''}
             </div>
@@ -839,7 +1097,8 @@
     }).join('');
   }
 
-  // Render class assignments
+  // ============ CLASS ASSIGNMENTS ============
+
   function renderClasses(records) {
     const el = document.getElementById('classList');
     document.getElementById('classCount').textContent = records.length;
@@ -862,12 +1121,12 @@
         <div class="task-item">
           <div class="task-check ${statusName(status).toLowerCase().includes('done') || statusName(status).toLowerCase().includes('completed') ? 'done' : ''}"></div>
           <div class="task-info">
-            <div class="task-name">${name}</div>
+            <div class="task-name">${escapeHtml(name)}</div>
             <div class="task-meta">
-              ${course ? `<span class="category-tag">${course}</span>` : ''}
-              ${type ? `<span>${selectName(type)}</span>` : ''}
+              ${course ? `<span class="category-tag">${escapeHtml(course)}</span>` : ''}
+              ${type ? `<span>${escapeHtml(selectName(type))}</span>` : ''}
               ${dueDate ? `<span>Due ${formatDate(dueDate)}</span>` : ''}
-              ${priority ? `<span><span class="priority-dot ${priorityClass(priority)}"></span> ${selectName(priority)}</span>` : ''}
+              ${priority ? `<span><span class="priority-dot ${priorityClass(priority)}"></span> ${escapeHtml(selectName(priority))}</span>` : ''}
               ${hours ? `<span>~${hours}h</span>` : ''}
               ${statusName(status) !== 'No Status' ? `<span>${statusName(status)}</span>` : ''}
             </div>
@@ -877,7 +1136,8 @@
     }).join('');
   }
 
-  // Sync status
+  // ============ SYNC ============
+
   function setSyncStatus(state, text) {
     const dot = document.getElementById('syncDot');
     const txt = document.getElementById('syncText');
@@ -885,7 +1145,6 @@
     txt.textContent = text;
   }
 
-  // Fetch all
   async function refreshAll() {
     setSyncStatus('syncing', 'Syncing with Airtable...');
 
