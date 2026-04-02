@@ -19,7 +19,6 @@
     --text-light: #b08890;
     --white: #ffffff;
     --pearl: #fdf0f3;
-    --ribbon: #e6a4b0;
     --sage: #c5d5c5;
     --lavender: #d8c8e8;
     --butter: #f5e6c8;
@@ -34,11 +33,9 @@
     min-height: 100vh;
     background-image:
       radial-gradient(ellipse at 20% 0%, rgba(248,196,212,0.3) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 100%, rgba(216,200,232,0.2) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 50%, rgba(242,213,220,0.15) 0%, transparent 70%);
+      radial-gradient(ellipse at 80% 100%, rgba(216,200,232,0.2) 0%, transparent 50%);
   }
 
-  /* Ribbon texture overlay */
   body::before {
     content: '';
     position: fixed;
@@ -56,12 +53,8 @@
     padding: 30px 24px;
   }
 
-  /* Header */
-  .header {
-    text-align: center;
-    margin-bottom: 36px;
-    position: relative;
-  }
+  /* ── HEADER ── */
+  .header { text-align: center; margin-bottom: 36px; position: relative; }
 
   .header::before, .header::after {
     content: '✿';
@@ -73,7 +66,7 @@
     opacity: 0.7;
   }
   .header::before { left: 10%; }
-  .header::after { right: 10%; }
+  .header::after  { right: 10%; }
 
   .header h1 {
     font-family: 'Playfair Display', serif;
@@ -83,12 +76,7 @@
     letter-spacing: 0.02em;
     line-height: 1.2;
   }
-
-  .header h1 span {
-    font-style: italic;
-    font-weight: 400;
-    color: var(--rose);
-  }
+  .header h1 span { font-style: italic; font-weight: 400; color: var(--rose); }
 
   .header .subtitle {
     font-size: 0.85rem;
@@ -109,30 +97,18 @@
     padding: 4px 14px;
     border-radius: 20px;
     border: 1px solid var(--soft-pink);
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
-  .sync-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--sage);
-    animation: pulse 2s infinite;
-  }
-
+  .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--sage); animation: pulse 2s infinite; }
   .sync-dot.syncing { background: var(--butter); }
-  .sync-dot.error { background: var(--rose); }
+  .sync-dot.error   { background: var(--rose); }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-  /* Grid layout */
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-    gap: 22px;
-  }
+  /* ── GRID ── */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
 
   .card {
     background: var(--white);
@@ -140,14 +116,11 @@
     border: 1px solid rgba(248,196,212,0.4);
     box-shadow: 0 2px 20px rgba(201,107,119,0.06), 0 0 0 1px rgba(255,255,255,0.8) inset;
     overflow: hidden;
-    transition: box-shadow 0.3s ease;
+    transition: box-shadow 0.3s;
   }
+  .card:hover { box-shadow: 0 6px 30px rgba(201,107,119,0.1), 0 0 0 1px rgba(255,255,255,0.8) inset; }
 
-  .card:hover {
-    box-shadow: 0 6px 30px rgba(201,107,119,0.1), 0 0 0 1px rgba(255,255,255,0.8) inset;
-  }
-
-  .card-calendar { grid-column: 1 / -1; }
+  .card-full { grid-column: 1 / -1; }
 
   .card-header {
     display: flex;
@@ -155,8 +128,9 @@
     justify-content: space-between;
     padding: 18px 22px 14px;
     border-bottom: 1px solid rgba(248,196,212,0.25);
+    gap: 8px;
+    flex-wrap: wrap;
   }
-
   .card-header h2 {
     font-family: 'Playfair Display', serif;
     font-size: 1.15rem;
@@ -166,11 +140,6 @@
     align-items: center;
     gap: 8px;
   }
-
-  .card-header h2 .icon {
-    font-size: 1.1rem;
-  }
-
   .card-header .badge {
     font-family: 'DM Sans', sans-serif;
     font-size: 0.7rem;
@@ -180,52 +149,42 @@
     border: 1px solid var(--soft-pink);
     padding: 3px 10px;
     border-radius: 12px;
-    letter-spacing: 0.04em;
   }
-
   .card-body { padding: 16px 22px 20px; }
 
-  /* Calendar navigation */
+  /* ── CALENDAR NAV ── */
   .cal-nav {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 14px;
+    gap: 10px;
     margin-bottom: 14px;
+    flex-wrap: wrap;
   }
-
   .cal-nav-btn {
     background: var(--pearl);
     border: 1px solid var(--soft-pink);
     color: var(--deep-rose);
-    width: 30px;
-    height: 30px;
+    width: 36px; height: 36px;
     border-radius: 50%;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.85rem;
-    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; font-weight: 700;
     transition: all 0.2s;
-    font-family: 'DM Sans', sans-serif;
+    flex-shrink: 0;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
-
-  .cal-nav-btn:hover {
-    background: var(--blush);
-    border-color: var(--rose);
-    color: var(--white);
-  }
+  .cal-nav-btn:hover, .cal-nav-btn:active { background: var(--blush); border-color: var(--rose); color: var(--white); }
 
   .cal-nav-label {
     font-family: 'Playfair Display', serif;
     font-size: 0.95rem;
     font-weight: 600;
     color: var(--text-dark);
-    min-width: 160px;
+    min-width: 110px;
     text-align: center;
   }
-
   .cal-today-btn {
     font-family: 'DM Sans', sans-serif;
     font-size: 0.65rem;
@@ -233,74 +192,66 @@
     color: var(--deep-rose);
     background: var(--pearl);
     border: 1px solid var(--soft-pink);
-    padding: 3px 10px;
+    padding: 6px 14px;
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.2s;
-    letter-spacing: 0.04em;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
+  .cal-today-btn:hover, .cal-today-btn:active { background: var(--blush); color: var(--white); }
 
-  .cal-today-btn:hover {
-    background: var(--blush);
-    color: var(--white);
-  }
-
-  /* Calendar */
-  .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
-  }
+  /* ── CALENDAR GRID ── */
+  .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
 
   .cal-day-name {
     text-align: center;
-    font-size: 0.7rem;
+    font-size: 0.64rem;
     font-weight: 600;
     color: var(--text-light);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding-bottom: 8px;
+    letter-spacing: 0.06em;
+    padding-bottom: 6px;
   }
 
   .cal-day {
-    aspect-ratio: 1.4;
-    border-radius: 12px;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    padding: 8px 4px;
-    font-size: 0.85rem;
+    padding: 6px 2px 5px;
+    font-size: 0.8rem;
     font-weight: 500;
     color: var(--text-medium);
+    min-height: 52px;
+    overflow: hidden;
     position: relative;
-    transition: all 0.2s;
-    cursor: default;
-    min-height: 70px;
   }
-
   .cal-day.today {
     background: var(--pearl);
     border: 1.5px solid var(--blush);
     color: var(--deep-rose);
-    font-weight: 600;
+    font-weight: 700;
   }
+  .cal-day.has-items { background: linear-gradient(135deg, var(--lace), var(--pearl)); }
+  .cal-day .day-num { font-size: 0.8rem; font-weight: 600; line-height: 1; margin-bottom: 3px; flex-shrink: 0; }
 
-  .cal-day.has-appt {
-    background: linear-gradient(135deg, var(--lace), var(--pearl));
-  }
+  /* Mobile: colored pips */
+  .cal-pips { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px; width: 100%; }
+  .cal-pip { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .pip-appt  { background: var(--rose); }
+  .pip-task  { background: var(--mauve); }
+  .pip-class { background: #a090c8; }
 
-  .cal-day .day-num { margin-bottom: 4px; }
-
+  /* Desktop: text labels */
   .appt-dot {
-    width: 100%;
-    max-width: 90%;
-    padding: 2px 4px;
+    display: none;
+    width: 100%; max-width: 94%;
+    padding: 2px 3px;
     border-radius: 4px;
-    font-size: 0.55rem;
+    font-size: 0.5rem;
     font-weight: 500;
     color: var(--white);
-    background: var(--rose);
     text-align: center;
     margin-top: 2px;
     white-space: nowrap;
@@ -308,120 +259,81 @@
     text-overflow: ellipsis;
     line-height: 1.3;
   }
+  .dot-appt  { background: var(--rose); }
+  .dot-task  { background: var(--mauve); }
+  .dot-class { background: var(--lavender); color: #6b5080; }
 
-  .appt-dot.dot-appt { background: var(--rose); }
-  .appt-dot.dot-task { background: var(--mauve); }
-  .appt-dot.dot-class { background: var(--lavender); color: #6b5080; }
+  /* Calendar legend */
+  .cal-legend {
+    display: flex; gap: 12px; justify-content: center;
+    margin-top: 12px; padding-top: 10px;
+    border-top: 1px solid rgba(248,196,212,0.2);
+    flex-wrap: wrap;
+  }
+  .cal-legend span { display: flex; align-items: center; gap: 5px; font-size: 0.68rem; color: var(--text-light); }
+  .legend-pip { width: 8px; height: 8px; border-radius: 3px; display: inline-block; }
 
-  /* Appointment list */
+  /* ── APPOINTMENT TABS ── */
+  .appt-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .appt-tab {
+    flex: 1;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1.5px solid var(--soft-pink);
+    background: transparent;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .appt-tab.active { background: var(--pearl); color: var(--deep-rose); border-color: var(--blush); }
+  .appt-tab:hover:not(.active) { background: var(--lace); color: var(--rose); }
+
+  /* ── APPOINTMENT ITEMS ── */
   .appt-item {
     padding: 14px 0;
     border-bottom: 1px solid rgba(248,196,212,0.15);
     cursor: pointer;
     transition: background 0.2s;
   }
-
   .appt-item:last-child { border-bottom: none; }
+  .appt-item:hover { background: var(--lace); margin: 0 -22px; padding-left: 22px; padding-right: 22px; }
 
-  .appt-item:hover {
-    background: var(--lace);
-    margin: 0 -22px;
-    padding-left: 22px;
-    padding-right: 22px;
-  }
-
-  .appt-item-top {
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-  }
+  .appt-item-top { display: flex; gap: 12px; align-items: flex-start; }
 
   .appt-date-badge {
     flex-shrink: 0;
-    width: 50px;
-    height: 52px;
+    width: 46px; height: 50px;
     border-radius: 12px;
     background: linear-gradient(135deg, var(--blush), var(--soft-pink));
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
     color: var(--deep-rose);
   }
+  .appt-date-badge .month { font-size: 0.52rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+  .appt-date-badge .day   { font-size: 1.1rem; font-weight: 700; line-height: 1; }
 
-  .appt-date-badge .month {
-    font-size: 0.55rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .appt-date-badge .day {
-    font-size: 1.15rem;
-    font-weight: 700;
-    line-height: 1;
-  }
+  /* Past: muted badge */
+  .appt-item.past .appt-date-badge { background: linear-gradient(135deg, #e8e0e2, #f0eaec); color: var(--text-light); }
 
   .appt-info { flex: 1; min-width: 0; }
+  .appt-info .name { font-weight: 600; font-size: 0.88rem; color: var(--text-dark); margin-bottom: 2px; }
+  .appt-item.past .appt-info .name { color: var(--text-medium); }
+  .appt-info .doctor   { font-size: 0.78rem; color: var(--text-medium); }
+  .appt-info .location { font-size: 0.72rem; color: var(--text-light); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .appt-info .time     { display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem; color: var(--deep-rose); font-weight: 500; margin-top: 4px; background: var(--pearl); padding: 2px 8px; border-radius: 8px; }
+  .appt-item.past .appt-info .time { color: var(--text-light); background: #f5f0f1; }
 
-  .appt-info .name {
-    font-weight: 600;
-    font-size: 0.88rem;
-    color: var(--text-dark);
-    margin-bottom: 2px;
-  }
+  .appt-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+  .appt-expand-icon { font-size: 0.75rem; color: var(--text-light); transition: transform 0.3s; }
+  .appt-item.expanded .appt-expand-icon { transform: rotate(180deg); }
 
-  .appt-info .doctor {
-    font-size: 0.78rem;
-    color: var(--text-medium);
-  }
-
-  .appt-info .location {
-    font-size: 0.72rem;
-    color: var(--text-light);
-    margin-top: 3px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .appt-info .time {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.72rem;
-    color: var(--deep-rose);
-    font-weight: 500;
-    margin-top: 4px;
-    background: var(--pearl);
-    padding: 2px 8px;
-    border-radius: 8px;
-  }
-
-  .appt-expand-icon {
-    flex-shrink: 0;
-    font-size: 0.75rem;
-    color: var(--text-light);
-    transition: transform 0.3s;
-    align-self: center;
-  }
-
-  .appt-item.expanded .appt-expand-icon {
-    transform: rotate(180deg);
-  }
-
-  .appt-notes {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.35s ease, padding 0.35s ease;
-    margin-left: 64px;
-    margin-right: 10px;
-  }
-
-  .appt-item.expanded .appt-notes {
-    max-height: 300px;
-    padding-top: 10px;
-  }
+  .appt-notes { max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.35s ease; margin-left: 58px; margin-right: 4px; }
+  .appt-item.expanded .appt-notes { max-height: 400px; padding-top: 10px; }
 
   .appt-notes-inner {
     background: var(--pearl);
@@ -430,42 +342,20 @@
     padding: 10px 14px;
     font-size: 0.78rem;
     color: var(--text-medium);
-    line-height: 1.5;
+    line-height: 1.6;
   }
+  .appt-notes-label { font-size: 0.62rem; font-weight: 600; color: var(--deep-rose); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px; }
 
-  .appt-notes-label {
-    font-size: 0.65rem;
-    font-weight: 600;
-    color: var(--deep-rose);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 4px;
-  }
-
-  .status-pill {
-    font-size: 0.65rem;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 10px;
-    letter-spacing: 0.03em;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .status-scheduled { background: var(--pearl); color: var(--deep-rose); border: 1px solid var(--soft-pink); }
-  .status-completed { background: #e8f5e8; color: #4a7c4a; border: 1px solid #c5d5c5; }
+  /* Status pills */
+  .status-pill { font-size: 0.62rem; font-weight: 600; padding: 3px 9px; border-radius: 10px; letter-spacing: 0.03em; white-space: nowrap; }
+  .status-scheduled   { background: var(--pearl); color: var(--deep-rose); border: 1px solid var(--soft-pink); }
+  .status-completed   { background: #e8f5e8; color: #4a7c4a; border: 1px solid #c5d5c5; }
+  .status-cancelled   { background: #f5ecec; color: #a06060; border: 1px solid #e8cccc; }
+  .status-in-progress { background: #fef3e0; color: #a07030; border: 1px solid var(--butter); }
   .status-not-started { background: var(--pearl); color: var(--text-light); border: 1px solid var(--soft-pink); }
-  .status-in-progress { background: #fef3e0; color: #a07030; border: 1px solid #f5e6c8; }
 
-  /* Task list */
-  .task-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(248,196,212,0.15);
-  }
-
+  /* ── TASKS ── */
+  .task-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(248,196,212,0.15); }
   .task-item:last-child { border-bottom: none; }
 
   .task-check {
@@ -473,173 +363,135 @@
     border-radius: 50%;
     border: 2px solid var(--blush);
     flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     cursor: pointer;
     transition: all 0.2s;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
+  .task-check:hover, .task-check:active { border-color: var(--rose); background: var(--pearl); }
+  .task-check.done { background: var(--rose); border-color: var(--rose); }
+  .task-check.done::after { content: '\2713'; color: white; font-size: 0.65rem; font-weight: 700; }
+  .task-check.saving { opacity: 0.5; pointer-events: none; }
 
-  .task-check:hover {
-    border-color: var(--rose);
-    background: var(--pearl);
-  }
-
-  .task-check.done {
-    background: var(--rose);
-    border-color: var(--rose);
-  }
-
-  .task-check.done::after {
-    content: '\2713';
-    color: white;
-    font-size: 0.65rem;
-    font-weight: 700;
-  }
-
-  .task-check.saving {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-
-  .task-item.completed-task .task-name {
-    text-decoration: line-through;
-    color: var(--text-light);
-  }
+  .task-item.completed-task .task-name { text-decoration: line-through; color: var(--text-light); }
 
   .task-info { flex: 1; min-width: 0; }
+  .task-info .task-name { font-weight: 500; font-size: 0.88rem; color: var(--text-dark); transition: all 0.3s; }
+  .task-info .task-meta { font-size: 0.72rem; color: var(--text-light); margin-top: 2px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 
-  .task-info .task-name {
-    font-weight: 500;
-    font-size: 0.88rem;
-    color: var(--text-dark);
-    transition: all 0.3s;
-  }
-
-  .task-info .task-meta {
-    font-size: 0.72rem;
-    color: var(--text-light);
-    margin-top: 2px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .priority-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    display: inline-block;
-  }
-
-  .priority-high { background: var(--rose); }
+  .priority-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .priority-high   { background: var(--rose); }
   .priority-medium { background: var(--butter); }
-  .priority-low { background: var(--sage); }
+  .priority-low    { background: var(--sage); }
 
-  .category-tag {
-    font-size: 0.65rem;
-    padding: 2px 8px;
-    border-radius: 8px;
-    background: var(--lace);
-    color: var(--mauve);
-    border: 1px solid rgba(212,160,168,0.3);
-  }
+  .category-tag { font-size: 0.65rem; padding: 2px 8px; border-radius: 8px; background: var(--lace); color: var(--mauve); border: 1px solid rgba(212,160,168,0.3); white-space: nowrap; }
 
-  /* Empty state */
-  .empty-state {
-    text-align: center;
-    padding: 30px 20px;
-    color: var(--text-light);
-    font-style: italic;
-    font-size: 0.85rem;
-  }
+  /* ── UTILITY ── */
+  .empty-state { text-align: center; padding: 30px 20px; color: var(--text-light); font-style: italic; font-size: 0.85rem; }
+  .empty-state::before { content: '\2661'; display: block; font-size: 1.5rem; margin-bottom: 8px; opacity: 0.4; }
 
-  .empty-state::before {
-    content: '\2661';
-    display: block;
-    font-size: 1.5rem;
-    margin-bottom: 8px;
-    opacity: 0.4;
-  }
-
-  /* Loading shimmer */
   .loading-shimmer {
     background: linear-gradient(90deg, var(--pearl) 25%, var(--lace) 50%, var(--pearl) 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
-    border-radius: 8px;
-    height: 46px;
-    margin-bottom: 8px;
+    border-radius: 8px; height: 46px; margin-bottom: 8px;
   }
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
-  @keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-    .grid { grid-template-columns: 1fr; }
-    .card-calendar { grid-column: 1; }
-    .header h1 { font-size: 1.8rem; }
-    .dashboard { padding: 20px 14px; }
-    .appt-item:hover {
-      margin: 0;
-      padding-left: 0;
-      padding-right: 0;
-    }
-  }
-
-  /* Scroll */
-  .card-body.scrollable {
-    max-height: 340px;
-    overflow-y: auto;
-  }
-
+  .card-body.scrollable { max-height: 360px; overflow-y: auto; }
   .card-body.scrollable::-webkit-scrollbar { width: 4px; }
   .card-body.scrollable::-webkit-scrollbar-track { background: transparent; }
   .card-body.scrollable::-webkit-scrollbar-thumb { background: var(--blush); border-radius: 4px; }
 
+  .appt-scroll { max-height: 320px; overflow-y: auto; }
+  .appt-scroll::-webkit-scrollbar { width: 4px; }
+  .appt-scroll::-webkit-scrollbar-track { background: transparent; }
+  .appt-scroll::-webkit-scrollbar-thumb { background: var(--blush); border-radius: 4px; }
+
   .refresh-btn {
-    background: none;
-    border: 1px solid var(--soft-pink);
-    color: var(--text-light);
-    font-size: 0.7rem;
-    padding: 3px 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    transition: all 0.2s;
+    background: none; border: 1px solid var(--soft-pink); color: var(--text-light);
+    font-size: 0.7rem; padding: 4px 10px; border-radius: 10px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+    touch-action: manipulation; -webkit-tap-highlight-color: transparent;
   }
+  .refresh-btn:hover, .refresh-btn:active { background: var(--pearl); color: var(--deep-rose); border-color: var(--rose); }
 
-  .refresh-btn:hover {
-    background: var(--pearl);
-    color: var(--deep-rose);
-    border-color: var(--rose);
-  }
-
-  /* Toast notification */
   .toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
+    position: fixed; bottom: 24px; left: 50%;
     transform: translateX(-50%) translateY(80px);
-    background: var(--text-dark);
-    color: var(--white);
-    padding: 10px 20px;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-family: 'DM Sans', sans-serif;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    transition: transform 0.35s ease;
-    z-index: 100;
+    background: var(--text-dark); color: var(--white);
+    padding: 10px 20px; border-radius: 12px; font-size: 0.8rem;
+    font-family: 'DM Sans', sans-serif; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    transition: transform 0.35s ease; z-index: 100; white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.toast-error { background: var(--deep-rose); }
+
+  /* ═══════════════════════════════
+     RESPONSIVE
+  ═══════════════════════════════ */
+
+  /* Mobile (< 600px) */
+  @media (max-width: 599px) {
+    .dashboard { padding: 14px 10px 40px; }
+    .header h1 { font-size: 1.55rem; }
+    .header::before, .header::after { display: none; }
+    .header .subtitle { font-size: 0.7rem; letter-spacing: 0.07em; }
+    .grid { grid-template-columns: 1fr; gap: 12px; }
+    .card-full { grid-column: 1; }
+    .card-header { padding: 12px 14px 10px; }
+    .card-header h2 { font-size: 0.95rem; }
+    .card-body { padding: 10px 12px 14px; }
+
+    /* Calendar: make day names single letter */
+    .cal-day-name { font-size: 0.56rem; letter-spacing: 0; }
+    .cal-day { min-height: 44px; padding: 5px 1px 4px; border-radius: 8px; }
+    .cal-day .day-num { font-size: 0.72rem; }
+    .appt-dot { display: none !important; }
+    .cal-pips { display: flex; }
+    .cal-pip { width: 5px; height: 5px; }
+    .cal-nav-label { min-width: 90px; font-size: 0.8rem; }
+    .cal-legend { gap: 8px; }
+    .cal-legend span { font-size: 0.6rem; }
+
+    /* Appointments */
+    .appt-tab { font-size: 0.68rem; padding: 6px 6px; }
+    .appt-item:hover { margin: 0; padding-left: 0; padding-right: 0; }
+    .appt-notes { margin-left: 0; }
+    .appt-date-badge { width: 40px; height: 44px; border-radius: 9px; }
+    .appt-date-badge .day { font-size: 0.95rem; }
+    .appt-date-badge .month { font-size: 0.46rem; }
+    .appt-info .name { font-size: 0.82rem; }
+    .status-pill { font-size: 0.56rem; padding: 2px 6px; }
+    .appt-scroll { max-height: 280px; }
+
+    /* Tasks */
+    .task-info .task-name { font-size: 0.82rem; }
+    .task-info .task-meta { font-size: 0.67rem; }
+    .card-body.scrollable { max-height: 280px; }
   }
 
-  .toast.show {
-    transform: translateX(-50%) translateY(0);
+  /* Tablet (600–899px) */
+  @media (min-width: 600px) and (max-width: 899px) {
+    .dashboard { padding: 20px 16px; }
+    .header h1 { font-size: 2rem; }
+    .grid { grid-template-columns: 1fr; gap: 16px; }
+    .card-full { grid-column: 1; }
+    .cal-day { min-height: 58px; }
+    .appt-dot { display: none !important; }
+    .cal-pips { display: flex; }
   }
 
-  .toast.toast-error {
-    background: var(--deep-rose);
+  /* Desktop (900px+) */
+  @media (min-width: 900px) {
+    .calendar-grid { gap: 6px; }
+    .cal-day { min-height: 74px; padding: 8px 3px 6px; }
+    .cal-day-name { font-size: 0.68rem; }
+    .appt-dot { display: block; }
+    .cal-pips { display: none; }
+    .grid { grid-template-columns: 1fr 1fr; }
+    .card-full { grid-column: 1 / -1; }
   }
 </style>
 </head>
@@ -657,24 +509,25 @@
   </header>
 
   <div class="grid">
-    <!-- Calendar -->
-    <div class="card card-calendar">
+
+    <!-- Calendar — full width -->
+    <div class="card card-full">
       <div class="card-header">
-        <h2><span class="icon">🗓</span> Weekly View</h2>
+        <h2><span>🗓</span> Weekly View</h2>
         <span class="badge" id="weekRange"></span>
       </div>
       <div class="card-body">
         <div class="cal-nav">
-          <button class="cal-nav-btn" onclick="changeWeek(-1)" title="Previous week">‹</button>
+          <button class="cal-nav-btn" onclick="changeWeek(-1)" aria-label="Previous week">‹</button>
           <span class="cal-nav-label" id="calNavLabel"></span>
-          <button class="cal-nav-btn" onclick="changeWeek(1)" title="Next week">›</button>
+          <button class="cal-nav-btn" onclick="changeWeek(1)" aria-label="Next week">›</button>
           <button class="cal-today-btn" onclick="goToday()">Today</button>
         </div>
         <div class="calendar-grid" id="calendarGrid"></div>
-        <div style="display:flex; gap:16px; justify-content:center; margin-top:12px; padding-top:10px; border-top:1px solid rgba(248,196,212,0.2);">
-          <span style="display:flex;align-items:center;gap:5px;font-size:0.68rem;color:var(--text-light)"><span style="width:8px;height:8px;border-radius:3px;background:var(--rose);display:inline-block"></span> Appointments</span>
-          <span style="display:flex;align-items:center;gap:5px;font-size:0.68rem;color:var(--text-light)"><span style="width:8px;height:8px;border-radius:3px;background:var(--mauve);display:inline-block"></span> Tasks</span>
-          <span style="display:flex;align-items:center;gap:5px;font-size:0.68rem;color:var(--text-light)"><span style="width:8px;height:8px;border-radius:3px;background:var(--lavender);display:inline-block"></span> Class Work</span>
+        <div class="cal-legend">
+          <span><span class="legend-pip" style="background:var(--rose)"></span> Appointments</span>
+          <span><span class="legend-pip" style="background:var(--mauve)"></span> Tasks</span>
+          <span><span class="legend-pip" style="background:#a090c8"></span> Class Work</span>
         </div>
       </div>
     </div>
@@ -682,20 +535,26 @@
     <!-- Doctor Appointments -->
     <div class="card">
       <div class="card-header">
-        <h2><span class="icon">🩺</span> Doctor Appointments</h2>
+        <h2><span>🩺</span> Doctor Appointments</h2>
         <span class="badge" id="apptCount">0</span>
       </div>
-      <div class="card-body scrollable" id="apptList">
-        <div class="loading-shimmer"></div>
-        <div class="loading-shimmer"></div>
-        <div class="loading-shimmer"></div>
+      <div class="card-body">
+        <div class="appt-tabs">
+          <button class="appt-tab active" id="tabScheduled" onclick="switchApptTab('scheduled')">📅 Scheduled</button>
+          <button class="appt-tab" id="tabPast" onclick="switchApptTab('past')">🕐 Past</button>
+        </div>
+        <div class="appt-scroll" id="apptList">
+          <div class="loading-shimmer"></div>
+          <div class="loading-shimmer"></div>
+          <div class="loading-shimmer"></div>
+        </div>
       </div>
     </div>
 
     <!-- General Tasks -->
     <div class="card">
       <div class="card-header">
-        <h2><span class="icon">✧</span> My Tasks</h2>
+        <h2><span>✧</span> My Tasks</h2>
         <span class="badge" id="taskCount">0</span>
       </div>
       <div class="card-body scrollable" id="taskList">
@@ -704,10 +563,10 @@
       </div>
     </div>
 
-    <!-- Class Assignments -->
-    <div class="card" style="grid-column: 1 / -1;">
+    <!-- Class Assignments — full width -->
+    <div class="card card-full">
       <div class="card-header">
-        <h2><span class="icon">📚</span> Class Assignments</h2>
+        <h2><span>📚</span> Class Assignments</h2>
         <span class="badge" id="classCount">0</span>
       </div>
       <div class="card-body scrollable" id="classList">
@@ -715,336 +574,252 @@
         <div class="loading-shimmer"></div>
       </div>
     </div>
+
   </div>
 </div>
 
-<!-- Toast notification -->
 <div class="toast" id="toast"></div>
 
 <script>
-  const TABLES = {
-    appointments: 'appointments',
-    tasks: 'tasks',
-    classes: 'classes'
-  };
-
   const FIELDS = {
     appointments: {
-      name: 'fldmQIVtP60Wck9Pq',
-      dateTime: 'fld5vhy9VSh3gzTtH',
-      doctor: 'fldK34rzQGn7T0NKs',
-      type: 'fldEWuTLbZKnu2Wwp',
-      location: 'fldmKEznTfJQYyVKK',
-      status: 'fldwYB109tEq7nLQu',
-      notes: 'fldfp6gOkpJpDL7Cv'
+      name:         'fldmQIVtP60Wck9Pq',
+      dateTime:     'fld5vhy9VSh3gzTtH',
+      doctor:       'fldK34rzQGn7T0NKs',
+      type:         'fldEWuTLbZKnu2Wwp',
+      location:     'fldmKEznTfJQYyVKK',
+      status:       'fldwYB109tEq7nLQu',
+      bookingNotes: 'fldfp6gOkpJpDL7Cv',  // shown for Scheduled
+      apptNotes:    'fldMKYsvekEleEYr5',   // shown for Past
     },
     tasks: {
-      name: 'fldk6OphWSvYXoNYJ',
-      dueDate: 'fldfea7bOlQK5TE0b',
-      priority: 'fldzrqF6ISwzI6qmT',
-      category: 'fldomczJ8lj4xRr97',
-      status: 'fldYR1Ftd47BS3DOd',
-      notes: 'fld9ZzSBewQrd7i6G',
+      name:      'fldk6OphWSvYXoNYJ',
+      dueDate:   'fldfea7bOlQK5TE0b',
+      priority:  'fldzrqF6ISwzI6qmT',
+      category:  'fldomczJ8lj4xRr97',
+      status:    'fldYR1Ftd47BS3DOd',
+      notes:     'fld9ZzSBewQrd7i6G',
       completed: 'fldRKYOCp59dENISp'
     },
     classes: {
-      name: 'fldx4BAewNWPaBjKZ',
-      course: 'fldHLqS7HfP4OYeKL',
-      dueDate: 'fld4NhdLNHqEE18q0',
-      type: 'fldbinqAuEiTDAx1E',
-      status: 'fldTEwMYSFhSGb1xU',
+      name:     'fldx4BAewNWPaBjKZ',
+      course:   'fldHLqS7HfP4OYeKL',
+      dueDate:  'fld4NhdLNHqEE18q0',
+      type:     'fldbinqAuEiTDAx1E',
+      status:   'fldTEwMYSFhSGb1xU',
       priority: 'fld1FqLHhdD51Y0co',
-      hours: 'fldwBAsDLbIHyTuAO',
-      link: 'fldVQu2SHhSgOqT1t',
-      notes: 'fldyQF8uk9Y6sixyV'
+      notes:    'fldyQF8uk9Y6sixyV'
     }
   };
 
-  // Data store
   let data = { appointments: [], tasks: [], classes: [] };
   let weekOffset = 0;
+  let apptTab = 'scheduled';
 
-  // Toast notification
-  function showToast(message, isError = false) {
-    const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.className = 'toast show' + (isError ? ' toast-error' : '');
-    setTimeout(() => { toast.className = 'toast'; }, 2500);
+  // ── Helpers ──
+  function fv(r, id) { return r.fields?.[id] ?? null; }
+  function esc(s) { if (!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function sel(v) { if (!v) return ''; return (typeof v === 'object' && v.name) ? v.name : String(v); }
+
+  function fmtDate(s) {
+    if (!s) return '';
+    return new Date(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
+  function fmtTime(s) {
+    if (!s) return '';
+    return new Date(s).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+  }
+  function monthDay(s) {
+    if (!s) return { month: '', day: '' };
+    const d = new Date(s);
+    return { month: d.toLocaleDateString('en-US',{month:'short'}), day: d.getDate() };
   }
 
-  // Fetch via Netlify serverless function
-  async function fetchTable(tableName) {
-    const res = await fetch(`/.netlify/functions/airtable?table=${tableName}`);
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error(`Function error ${res.status} for ${tableName}:`, errText);
-      throw new Error(`Function error: ${res.status}`);
-    }
-    const json = await res.json();
-    return json.records || [];
-  }
-
-  // Update a record via PATCH
-  async function updateRecord(tableName, recordId, fields) {
-    const res = await fetch('/.netlify/functions/airtable', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ table: tableName, recordId, fields })
-    });
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error(`Update error ${res.status}:`, errText);
-      throw new Error(`Update error: ${res.status}`);
-    }
-    return await res.json();
-  }
-
-  // Get field value helper
-  function fv(record, fieldId) {
-    return record.fields?.[fieldId] ?? null;
-  }
-
-  // Format helpers
-  function formatDate(dateStr) {
-    if (!dateStr) return '';
-    const d = new Date(dateStr);
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  }
-
-  function formatTime(dateStr) {
-    if (!dateStr) return '';
-    const d = new Date(dateStr);
-    return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-  }
-
-  function getMonthDay(dateStr) {
-    if (!dateStr) return { month: '', day: '' };
-    const d = new Date(dateStr);
-    return {
-      month: d.toLocaleDateString('en-US', { month: 'short' }),
-      day: d.getDate()
-    };
-  }
-
-  function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  }
-
-  // Status class
-  function statusClass(status) {
-    if (!status) return 'status-not-started';
-    const s = (typeof status === 'object' ? status.name : status).toLowerCase();
-    if (s.includes('scheduled') || s.includes('upcoming')) return 'status-scheduled';
-    if (s.includes('completed') || s.includes('done')) return 'status-completed';
+  function sClass(status) {
+    const s = sel(status).toLowerCase();
+    if (!s) return 'status-not-started';
+    if (s.includes('scheduled')||s.includes('upcoming')||s.includes('confirmed')) return 'status-scheduled';
+    if (s.includes('completed')||s.includes('done')) return 'status-completed';
+    if (s.includes('cancel')) return 'status-cancelled';
     if (s.includes('progress')) return 'status-in-progress';
     return 'status-not-started';
   }
+  function sName(status) { return sel(status) || 'No Status'; }
 
-  function statusName(status) {
-    if (!status) return 'No Status';
-    return typeof status === 'object' ? status.name : status;
-  }
-
-  function selectName(val) {
-    if (!val) return '';
-    if (typeof val === 'object' && val.name) return val.name;
-    return val;
-  }
-
-  function priorityClass(p) {
-    if (!p) return 'priority-low';
-    const name = selectName(p).toLowerCase();
-    if (name.includes('high') || name.includes('urgent')) return 'priority-high';
-    if (name.includes('medium')) return 'priority-medium';
+  function prioClass(p) {
+    const n = sel(p).toLowerCase();
+    if (n.includes('high')||n.includes('urgent')) return 'priority-high';
+    if (n.includes('medium')) return 'priority-medium';
     return 'priority-low';
   }
 
-  // ============ CALENDAR WITH WEEK NAVIGATION ============
-
-  function changeWeek(direction) {
-    weekOffset += direction;
-    buildCalendar(data.appointments, data.tasks, data.classes);
+  function showToast(msg, isError=false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show' + (isError ? ' toast-error' : '');
+    setTimeout(() => t.className = 'toast', 2500);
   }
 
-  function goToday() {
-    weekOffset = 0;
-    buildCalendar(data.appointments, data.tasks, data.classes);
+  // ── API ──
+  async function fetchTable(name) {
+    const r = await fetch(`/.netlify/functions/airtable?table=${name}`);
+    if (!r.ok) throw new Error(`Error ${r.status}`);
+    return (await r.json()).records || [];
+  }
+  async function updateRecord(name, id, fields) {
+    const r = await fetch('/.netlify/functions/airtable', {
+      method: 'PATCH',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({table:name, recordId:id, fields})
+    });
+    if (!r.ok) throw new Error(`Error ${r.status}`);
   }
 
-  function buildCalendar(appointments, tasks, classes) {
+  // ── CALENDAR ──
+  function changeWeek(d) { weekOffset += d; buildCalendar(); }
+  function goToday()     { weekOffset = 0;  buildCalendar(); }
+
+  function buildCalendar() {
+    const { appointments, tasks, classes } = data;
     const now = new Date();
-    const startOfWeek = new Date(now);
-    startOfWeek.setDate(now.getDate() - now.getDay() + (weekOffset * 7));
-    startOfWeek.setHours(0, 0, 0, 0);
+    const start = new Date(now);
+    start.setDate(now.getDate() - now.getDay() + weekOffset * 7);
+    start.setHours(0,0,0,0);
 
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6);
-    endOfWeek.setHours(23, 59, 59, 999);
-
-    const rangeText = `${startOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${endOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+    const rangeText = `${start.toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${new Date(start.getFullYear(), start.getMonth(), start.getDate()+6).toLocaleDateString('en-US',{month:'short',day:'numeric'})}`;
     document.getElementById('weekRange').textContent = rangeText;
 
-    // Nav label
     let navLabel = rangeText;
-    if (weekOffset === 0) navLabel = 'This Week';
-    else if (weekOffset === -1) navLabel = 'Last Week';
-    else if (weekOffset === 1) navLabel = 'Next Week';
+    if (weekOffset === 0)  navLabel = 'This Week';
+    if (weekOffset === -1) navLabel = 'Last Week';
+    if (weekOffset === 1)  navLabel = 'Next Week';
     document.getElementById('calNavLabel').textContent = navLabel;
 
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    let html = days.map(d => `<div class="cal-day-name">${d}</div>`).join('');
+    const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    let html = dayNames.map(d => `<div class="cal-day-name">${d}</div>`).join('');
 
     for (let i = 0; i < 7; i++) {
-      const day = new Date(startOfWeek);
-      day.setDate(startOfWeek.getDate() + i);
+      const day = new Date(start);
+      day.setDate(start.getDate() + i);
       const isToday = day.toDateString() === now.toDateString();
 
-      const dayAppts = appointments.filter(a => {
-        const dt = fv(a, FIELDS.appointments.dateTime);
-        if (!dt) return false;
-        return new Date(dt).toDateString() === day.toDateString();
-      });
+      const da = appointments.filter(a => { const dt=fv(a,FIELDS.appointments.dateTime); return dt && new Date(dt).toDateString()===day.toDateString(); });
+      const dt = tasks.filter(t       => { const d=fv(t,FIELDS.tasks.dueDate); return d && new Date(d).toDateString()===day.toDateString(); });
+      const dc = classes.filter(c     => { const d=fv(c,FIELDS.classes.dueDate); return d && new Date(d).toDateString()===day.toDateString(); });
 
-      const dayTasks = tasks.filter(t => {
-        const dt = fv(t, FIELDS.tasks.dueDate);
-        if (!dt) return false;
-        return new Date(dt).toDateString() === day.toDateString();
-      });
+      const hasItems = da.length || dt.length || dc.length;
+      const cls = ['cal-day', isToday?'today':'', hasItems?'has-items':''].filter(Boolean).join(' ');
 
-      const dayClasses = classes.filter(c => {
-        const dt = fv(c, FIELDS.classes.dueDate);
-        if (!dt) return false;
-        return new Date(dt).toDateString() === day.toDateString();
-      });
+      // Desktop text labels
+      let labels = da.map(a => `<div class="appt-dot dot-appt">🩺 ${fmtTime(fv(a,FIELDS.appointments.dateTime))}</div>`).join('');
+      labels    += dt.map(t => { const n=fv(t,FIELDS.tasks.name)||'Task'; return `<div class="appt-dot dot-task">✧ ${esc(n.slice(0,9))}${n.length>9?'…':''}</div>`; }).join('');
+      labels    += dc.map(c => { const n=fv(c,FIELDS.classes.name)||'Work'; return `<div class="appt-dot dot-class">📚 ${esc(n.slice(0,9))}${n.length>9?'…':''}</div>`; }).join('');
 
-      const hasItems = dayAppts.length > 0 || dayTasks.length > 0 || dayClasses.length > 0;
-      const cls = ['cal-day', isToday ? 'today' : '', hasItems ? 'has-appt' : ''].filter(Boolean).join(' ');
+      // Mobile pips
+      let pips = '<div class="cal-pips">';
+      pips += da.map(() => '<span class="cal-pip pip-appt"></span>').join('');
+      pips += dt.map(() => '<span class="cal-pip pip-task"></span>').join('');
+      pips += dc.map(() => '<span class="cal-pip pip-class"></span>').join('');
+      pips += '</div>';
 
-      let dots = '';
-
-      dots += dayAppts.map(a => {
-        const time = formatTime(fv(a, FIELDS.appointments.dateTime));
-        const doctor = fv(a, FIELDS.appointments.doctor) || '';
-        return `<div class="appt-dot dot-appt" title="${escapeHtml(doctor)} at ${time}">🩺 ${time}</div>`;
-      }).join('');
-
-      dots += dayTasks.map(t => {
-        const name = fv(t, FIELDS.tasks.name) || 'Task';
-        const short = name.length > 12 ? name.slice(0, 12) + '…' : name;
-        return `<div class="appt-dot dot-task" title="${escapeHtml(name)}">✧ ${escapeHtml(short)}</div>`;
-      }).join('');
-
-      dots += dayClasses.map(c => {
-        const name = fv(c, FIELDS.classes.name) || 'Assignment';
-        const short = name.length > 12 ? name.slice(0, 12) + '…' : name;
-        return `<div class="appt-dot dot-class" title="${escapeHtml(name)}">📚 ${escapeHtml(short)}</div>`;
-      }).join('');
-
-      html += `<div class="${cls}"><span class="day-num">${day.getDate()}</span>${dots}</div>`;
+      html += `<div class="${cls}"><span class="day-num">${day.getDate()}</span>${labels}${pips}</div>`;
     }
 
     document.getElementById('calendarGrid').innerHTML = html;
   }
 
-  // ============ EXPANDABLE APPOINTMENTS ============
-
-  function toggleAppt(el) {
-    el.classList.toggle('expanded');
+  // ── APPOINTMENT TABS ──
+  function switchApptTab(tab) {
+    apptTab = tab;
+    document.getElementById('tabScheduled').className = 'appt-tab' + (tab==='scheduled' ? ' active' : '');
+    document.getElementById('tabPast').className      = 'appt-tab' + (tab==='past'      ? ' active' : '');
+    renderAppointments(data.appointments);
   }
 
+  function toggleAppt(el) { el.classList.toggle('expanded'); }
+
   function renderAppointments(records) {
-    const el = document.getElementById('apptList');
+    const el  = document.getElementById('apptList');
+    const now = new Date();
+
     document.getElementById('apptCount').textContent = records.length;
 
-    if (!records.length) {
-      el.innerHTML = '<div class="empty-state">No upcoming appointments</div>';
+    const scheduled = records
+      .filter(r => { const dt=fv(r,FIELDS.appointments.dateTime); return !dt || new Date(dt) >= now; })
+      .sort((a,b) => new Date(fv(a,FIELDS.appointments.dateTime)||0) - new Date(fv(b,FIELDS.appointments.dateTime)||0));
+
+    const past = records
+      .filter(r => { const dt=fv(r,FIELDS.appointments.dateTime); return dt && new Date(dt) < now; })
+      .sort((a,b) => new Date(fv(b,FIELDS.appointments.dateTime)||0) - new Date(fv(a,FIELDS.appointments.dateTime)||0));
+
+    const showing = apptTab === 'scheduled' ? scheduled : past;
+
+    if (!showing.length) {
+      el.innerHTML = `<div class="empty-state">${apptTab==='scheduled' ? 'No upcoming appointments ♡' : 'No past appointments yet'}</div>`;
       return;
     }
 
-    records.sort((a, b) => {
-      const da = fv(a, FIELDS.appointments.dateTime) || '';
-      const db = fv(b, FIELDS.appointments.dateTime) || '';
-      return new Date(da) - new Date(db);
-    });
-
-    el.innerHTML = records.map(r => {
-      const { month, day } = getMonthDay(fv(r, FIELDS.appointments.dateTime));
-      const name = fv(r, FIELDS.appointments.name) || 'Appointment';
-      const doctor = fv(r, FIELDS.appointments.doctor) || '';
+    el.innerHTML = showing.map(r => {
+      const {month, day} = monthDay(fv(r, FIELDS.appointments.dateTime));
+      const name     = fv(r, FIELDS.appointments.name) || 'Appointment';
+      const doctor   = fv(r, FIELDS.appointments.doctor) || '';
       const location = fv(r, FIELDS.appointments.location) || '';
-      const time = formatTime(fv(r, FIELDS.appointments.dateTime));
-      const status = fv(r, FIELDS.appointments.status);
-      const type = fv(r, FIELDS.appointments.type);
-      const notes = fv(r, FIELDS.appointments.notes) || '';
-      const hasNotes = notes.trim().length > 0;
+      const time     = fmtTime(fv(r, FIELDS.appointments.dateTime));
+      const status   = fv(r, FIELDS.appointments.status);
+      const type     = fv(r, FIELDS.appointments.type);
+      const isPast   = apptTab === 'past';
+
+      // Scheduled → Booking Notes; Past → Appointment Notes
+      const notesText  = isPast ? (fv(r, FIELDS.appointments.apptNotes)||'') : (fv(r, FIELDS.appointments.bookingNotes)||'');
+      const notesLabel = isPast ? 'Appointment Notes' : 'Booking Notes';
+      const hasNotes   = notesText.trim().length > 0;
 
       return `
-        <div class="appt-item${hasNotes ? '' : ' no-notes'}" onclick="${hasNotes ? 'toggleAppt(this)' : ''}">
+        <div class="appt-item${isPast?' past':''}" onclick="${hasNotes?'toggleAppt(this)':''}">
           <div class="appt-item-top">
             <div class="appt-date-badge">
               <span class="month">${month}</span>
               <span class="day">${day}</span>
             </div>
             <div class="appt-info">
-              <div class="name">${escapeHtml(selectName(type) || 'Appointment')} – ${escapeHtml(doctor.split(',')[0])}</div>
-              <div class="doctor">${escapeHtml(doctor)}</div>
-              <div class="location">${escapeHtml(location)}</div>
-              <div class="time">♡ ${time}</div>
+              <div class="name">${esc(sel(type)||name)}${doctor ? ' – '+esc(doctor.split(',')[0]) : ''}</div>
+              ${doctor   ? `<div class="doctor">${esc(doctor)}</div>` : ''}
+              ${location ? `<div class="location">📍 ${esc(location)}</div>` : ''}
+              ${time     ? `<div class="time">♡ ${time}</div>` : ''}
             </div>
-            <span class="status-pill ${statusClass(status)}">${statusName(status)}</span>
-            ${hasNotes ? '<span class="appt-expand-icon">▼</span>' : ''}
+            <div class="appt-right">
+              <span class="status-pill ${sClass(status)}">${sName(status)}</span>
+              ${hasNotes ? '<span class="appt-expand-icon">▼</span>' : ''}
+            </div>
           </div>
           ${hasNotes ? `
           <div class="appt-notes">
             <div class="appt-notes-inner">
-              <div class="appt-notes-label">Notes</div>
-              ${escapeHtml(notes)}
+              <div class="appt-notes-label">${notesLabel}</div>
+              ${esc(notesText)}
             </div>
           </div>` : ''}
-        </div>
-      `;
+        </div>`;
     }).join('');
   }
 
-  // ============ TASKS WITH CHECKBOX SYNC ============
-
-  async function toggleTask(checkbox, recordId, currentState) {
-    const newState = !currentState;
-    const taskItem = checkbox.closest('.task-item');
-
-    // Optimistic UI update
+  // ── TASKS ──
+  async function toggleTask(checkbox, recordId, current) {
+    const newState = !current;
+    const item = checkbox.closest('.task-item');
     checkbox.classList.add('saving');
-    if (newState) {
-      checkbox.classList.add('done');
-      taskItem.classList.add('completed-task');
-    } else {
-      checkbox.classList.remove('done');
-      taskItem.classList.remove('completed-task');
-    }
-
+    newState ? (checkbox.classList.add('done'), item.classList.add('completed-task'))
+             : (checkbox.classList.remove('done'), item.classList.remove('completed-task'));
     try {
-      await updateRecord('tasks', recordId, {
-        [FIELDS.tasks.completed]: newState
-      });
-
+      await updateRecord('tasks', recordId, {[FIELDS.tasks.completed]: newState});
       checkbox.classList.remove('saving');
       showToast(newState ? '✓ Task completed!' : 'Task unchecked');
-
-      // Update local data
       const rec = data.tasks.find(t => t.id === recordId);
       if (rec) rec.fields[FIELDS.tasks.completed] = newState;
-
-    } catch (err) {
-      // Revert on error
+    } catch {
       checkbox.classList.remove('saving');
-      if (newState) {
-        checkbox.classList.remove('done');
-        taskItem.classList.remove('completed-task');
-      } else {
-        checkbox.classList.add('done');
-        taskItem.classList.add('completed-task');
-      }
+      newState ? (checkbox.classList.remove('done'), item.classList.remove('completed-task'))
+               : (checkbox.classList.add('done'), item.classList.add('completed-task'));
       showToast('Failed to update — try again', true);
     }
   }
@@ -1052,132 +827,100 @@
   function renderTasks(records) {
     const el = document.getElementById('taskList');
     document.getElementById('taskCount').textContent = records.length;
+    if (!records.length) { el.innerHTML = '<div class="empty-state">No tasks right now — free time!</div>'; return; }
 
-    if (!records.length) {
-      el.innerHTML = '<div class="empty-state">No tasks right now — free time!</div>';
-      return;
-    }
-
-    // Sort: incomplete first, then by due date
-    records.sort((a, b) => {
-      const aDone = fv(a, FIELDS.tasks.completed) ? 1 : 0;
-      const bDone = fv(b, FIELDS.tasks.completed) ? 1 : 0;
-      if (aDone !== bDone) return aDone - bDone;
-      const da = fv(a, FIELDS.tasks.dueDate) || '9999';
-      const db = fv(b, FIELDS.tasks.dueDate) || '9999';
-      return new Date(da) - new Date(db);
+    records.sort((a,b) => {
+      const ad = fv(a,FIELDS.tasks.completed)?1:0, bd = fv(b,FIELDS.tasks.completed)?1:0;
+      if (ad!==bd) return ad-bd;
+      return new Date(fv(a,FIELDS.tasks.dueDate)||'9999') - new Date(fv(b,FIELDS.tasks.dueDate)||'9999');
     });
 
     el.innerHTML = records.map(r => {
-      const name = fv(r, FIELDS.tasks.name) || 'Task';
-      const dueDate = fv(r, FIELDS.tasks.dueDate);
-      const priority = fv(r, FIELDS.tasks.priority);
-      const categories = fv(r, FIELDS.tasks.category) || [];
-      const status = fv(r, FIELDS.tasks.status);
-      const completed = fv(r, FIELDS.tasks.completed);
-
-      const cats = (Array.isArray(categories) ? categories : [categories])
-        .filter(Boolean)
-        .map(c => `<span class="category-tag">${escapeHtml(selectName(c))}</span>`).join('');
+      const name      = fv(r,FIELDS.tasks.name)||'Task';
+      const dueDate   = fv(r,FIELDS.tasks.dueDate);
+      const priority  = fv(r,FIELDS.tasks.priority);
+      const cats      = fv(r,FIELDS.tasks.category)||[];
+      const status    = fv(r,FIELDS.tasks.status);
+      const completed = fv(r,FIELDS.tasks.completed);
+      const catTags   = (Array.isArray(cats)?cats:[cats]).filter(Boolean).map(c=>`<span class="category-tag">${esc(sel(c))}</span>`).join('');
 
       return `
-        <div class="task-item ${completed ? 'completed-task' : ''}">
-          <div class="task-check ${completed ? 'done' : ''}" onclick="toggleTask(this, '${r.id}', ${!!completed})"></div>
+        <div class="task-item${completed?' completed-task':''}">
+          <div class="task-check${completed?' done':''}" onclick="toggleTask(this,'${r.id}',${!!completed})"></div>
           <div class="task-info">
-            <div class="task-name">${escapeHtml(name)}</div>
+            <div class="task-name">${esc(name)}</div>
             <div class="task-meta">
-              ${priority ? `<span><span class="priority-dot ${priorityClass(priority)}"></span> ${escapeHtml(selectName(priority))}</span>` : ''}
-              ${dueDate ? `<span>Due ${formatDate(dueDate)}</span>` : ''}
-              ${statusName(status) !== 'No Status' ? `<span>${statusName(status)}</span>` : ''}
+              ${priority ? `<span><span class="priority-dot ${prioClass(priority)}"></span> ${esc(sel(priority))}</span>` : ''}
+              ${dueDate  ? `<span>Due ${fmtDate(dueDate)}</span>` : ''}
+              ${sName(status)!=='No Status' ? `<span>${sName(status)}</span>` : ''}
             </div>
-            ${cats ? `<div style="margin-top:4px">${cats}</div>` : ''}
+            ${catTags ? `<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px">${catTags}</div>` : ''}
           </div>
-        </div>
-      `;
+        </div>`;
     }).join('');
   }
 
-  // ============ CLASS ASSIGNMENTS ============
-
+  // ── CLASSES ──
   function renderClasses(records) {
     const el = document.getElementById('classList');
     document.getElementById('classCount').textContent = records.length;
-
-    if (!records.length) {
-      el.innerHTML = '<div class="empty-state">No class assignments yet</div>';
-      return;
-    }
+    if (!records.length) { el.innerHTML = '<div class="empty-state">No class assignments yet</div>'; return; }
 
     el.innerHTML = records.map(r => {
-      const name = fv(r, FIELDS.classes.name) || 'Assignment';
-      const course = fv(r, FIELDS.classes.course) || '';
-      const dueDate = fv(r, FIELDS.classes.dueDate);
-      const type = fv(r, FIELDS.classes.type);
-      const status = fv(r, FIELDS.classes.status);
-      const priority = fv(r, FIELDS.classes.priority);
-      const hours = fv(r, FIELDS.classes.hours);
+      const name     = fv(r,FIELDS.classes.name)||'Assignment';
+      const course   = fv(r,FIELDS.classes.course)||'';
+      const dueDate  = fv(r,FIELDS.classes.dueDate);
+      const type     = fv(r,FIELDS.classes.type);
+      const status   = fv(r,FIELDS.classes.status);
+      const priority = fv(r,FIELDS.classes.priority);
+      const done     = sel(status).toLowerCase().match(/done|completed/);
 
       return `
         <div class="task-item">
-          <div class="task-check ${statusName(status).toLowerCase().includes('done') || statusName(status).toLowerCase().includes('completed') ? 'done' : ''}"></div>
+          <div class="task-check${done?' done':''}"></div>
           <div class="task-info">
-            <div class="task-name">${escapeHtml(name)}</div>
+            <div class="task-name">${esc(name)}</div>
             <div class="task-meta">
-              ${course ? `<span class="category-tag">${escapeHtml(course)}</span>` : ''}
-              ${type ? `<span>${escapeHtml(selectName(type))}</span>` : ''}
-              ${dueDate ? `<span>Due ${formatDate(dueDate)}</span>` : ''}
-              ${priority ? `<span><span class="priority-dot ${priorityClass(priority)}"></span> ${escapeHtml(selectName(priority))}</span>` : ''}
-              ${hours ? `<span>~${hours}h</span>` : ''}
-              ${statusName(status) !== 'No Status' ? `<span>${statusName(status)}</span>` : ''}
+              ${course   ? `<span class="category-tag">${esc(course)}</span>` : ''}
+              ${type     ? `<span>${esc(sel(type))}</span>` : ''}
+              ${dueDate  ? `<span>Due ${fmtDate(dueDate)}</span>` : ''}
+              ${priority ? `<span><span class="priority-dot ${prioClass(priority)}"></span> ${esc(sel(priority))}</span>` : ''}
+              ${sName(status)!=='No Status' ? `<span>${sName(status)}</span>` : ''}
             </div>
           </div>
-        </div>
-      `;
+        </div>`;
     }).join('');
   }
 
-  // ============ SYNC ============
-
+  // ── SYNC ──
   function setSyncStatus(state, text) {
-    const dot = document.getElementById('syncDot');
-    const txt = document.getElementById('syncText');
-    dot.className = 'sync-dot' + (state === 'syncing' ? ' syncing' : state === 'error' ? ' error' : '');
-    txt.textContent = text;
+    document.getElementById('syncDot').className = 'sync-dot'+(state==='syncing'?' syncing':state==='error'?' error':'');
+    document.getElementById('syncText').textContent = text;
   }
 
   async function refreshAll() {
-    setSyncStatus('syncing', 'Syncing with Airtable...');
-
+    setSyncStatus('syncing','Syncing with Airtable...');
     try {
       const [appts, tasks, classes] = await Promise.all([
-        fetchTable(TABLES.appointments),
-        fetchTable(TABLES.tasks),
-        fetchTable(TABLES.classes)
+        fetchTable('appointments'), fetchTable('tasks'), fetchTable('classes')
       ]);
-
       data.appointments = appts;
-      data.tasks = tasks;
-      data.classes = classes;
-
-      buildCalendar(appts, tasks, classes);
+      data.tasks        = tasks;
+      data.classes      = classes;
+      buildCalendar();
       renderAppointments(appts);
       renderTasks(tasks);
       renderClasses(classes);
-
       const now = new Date();
-      setSyncStatus('ok', `Last synced ${now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`);
-    } catch (err) {
-      console.error('Sync error:', err);
-      setSyncStatus('error', 'Sync failed — tap refresh');
+      setSyncStatus('ok', `Last synced ${now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}`);
+    } catch(e) {
+      console.error(e);
+      setSyncStatus('error','Sync failed — tap refresh');
     }
   }
 
-  // Initial load
   refreshAll();
-
-  // Auto-sync every 30 seconds
   setInterval(refreshAll, 30000);
 </script>
-
 </body>
 </html>
