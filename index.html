@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lizzie's Life Manager ♡</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blush: #f8c4d4;
+    --rose: #e8909c;
+    --deep-rose: #c96b77;
+    --cream: #fef6f0;
+    --lace: #fff5f7;
+    --mauve: #d4a0a8;
+    --soft-pink: #f2d5dc;
+    --text-dark: #5c3d44;
+    --text-medium: #8c6068;
+    --text-light: #b08890;
+    --white: #ffffff;
+    --pearl: #fdf0f3;
+    --ribbon: #e6a4b0;
+    --sage: #c5d5c5;
+    --lavender: #d8c8e8;
+    --butter: #f5e6c8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(248,196,212,0.3) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, rgba(216,200,232,0.2) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(242,213,220,0.15) 0%, transparent 70%);
+  }
+
+  /* Ribbon texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 Q35 15 30 25 Q25 35 30 45 Q35 55 30 55' stroke='%23f8c4d4' stroke-width='0.3' fill='none' opacity='0.3'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .dashboard {
+    position: relative;
+    z-index: 1;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 30px 24px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+    position: relative;
+  }
+
+  .header::before, .header::after {
+    content: '✿';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: var(--blush);
+    opacity: 0.7;
+  }
+  .header::before { left: 10%; }
+  .header::after { right: 10%; }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--deep-rose);
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+
+  .header h1 span {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--rose);
+  }
+
+  .header .subtitle {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 6px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .sync-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    background: var(--white);
+    padding: 4px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--soft-pink);
+  }
+
+  .sync-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--sage);
+    animation: pulse 2s infinite;
+  }
+
+  .sync-dot.syncing { background: var(--butter); }
+  .sync-dot.error { background: var(--rose); }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* Grid layout */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 22px;
+  }
+
+  .card {
+    background: var(--white);
+    border-radius: 18px;
+    border: 1px solid rgba(248,196,212,0.4);
+    box-shadow: 0 2px 20px rgba(201,107,119,0.06), 0 0 0 1px rgba(255,255,255,0.8) inset;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    box-shadow: 0 6px 30px rgba(201,107,119,0.1), 0 0 0 1px rgba(255,255,255,0.8) inset;
+  }
+
+  .card-calendar { grid-column: 1 / -1; }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px 14px;
+    border-bottom: 1px solid rgba(248,196,212,0.25);
+  }
+
+  .card-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-header h2 .icon {
+    font-size: 1.1rem;
+  }
+
+  .card-header .badge {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--deep-rose);
+    background: var(--pearl);
+    border: 1px solid var(--soft-pink);
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.04em;
+  }
+
+  .card-body { padding: 16px 22px 20px; }
+
+  /* Calendar */
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+  }
+
+  .cal-day-name {
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding-bottom: 8px;
+  }
+
+  .cal-day {
+    aspect-ratio: 1.4;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-medium);
+    position: relative;
+    transition: all 0.2s;
+    cursor: default;
+    min-height: 70px;
+  }
+
+  .cal-day.today {
+    background: var(--pearl);
+    border: 1.5px solid var(--blush);
+    color: var(--deep-rose);
+    font-weight: 600;
+  }
+
+  .cal-day.has-appt {
+    background: linear-gradient(135deg, var(--lace), var(--pearl));
+  }
+
+  .cal-day .day-num { margin-bottom: 4px; }
+
+  .appt-dot {
+    width: 100%;
+    max-width: 90%;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-size: 0.55rem;
+    font-weight: 500;
+    color: var(--white);
+    background: var(--rose);
+    text-align: center;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+  }
+
+  .appt-dot.dot-appt { background: var(--rose); }
+  .appt-dot.dot-task { background: var(--mauve); }
+  .appt-dot.dot-class { background: var(--lavender); color: #6b5080; }
+
+  /* Appointment list */
+  .appt-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(248,196,212,0.15);
+    align-items: flex-start;
+  }
+
+  .appt-item:last-child { border-bottom: none; }
+
+  .appt-date-badge {
+    flex-shrink: 0;
+    width: 50px;
+    height: 52px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--blush), var(--soft-pink));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--deep-rose);
+  }
+
+  .appt-date-badge .month {
+    font-size: 0.55rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .appt-date-badge .day {
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .appt-info { flex: 1; min-width: 0; }
+
+  .appt-info .name {
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--text-dark);
+    margin-bottom: 2px;
+  }
+
+  .appt-info .doctor {
+    font-size: 0.78rem;
+    color: var(--text-medium);
+  }
+
+  .appt-info .location {
+    font-size: 0.72rem;
+    color: var(--text-light);
+    margin-top: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .appt-info .time {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72rem;
+    color: var(--deep-rose);
+    font-weight: 500;
+    margin-top: 4px;
+    background: var(--pearl);
+    padding: 2px 8px;
+    border-radius: 8px;
+  }
+
+  .status-pill {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 10px;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+
+  .status-scheduled { background: var(--pearl); color: var(--deep-rose); border: 1px solid var(--soft-pink); }
+  .status-completed { background: #e8f5e8; color: #4a7c4a; border: 1px solid #c5d5c5; }
+  .status-not-started { background: var(--pearl); color: var(--text-light); border: 1px solid var(--soft-pink); }
+  .status-in-progress { background: #fef3e0; color: #a07030; border: 1px solid #f5e6c8; }
+
+  /* Task list */
+  .task-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(248,196,212,0.15);
+  }
+
+  .task-item:last-child { border-bottom: none; }
+
+  .task-check {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--blush);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .task-check.done {
+    background: var(--rose);
+    border-color: var(--rose);
+  }
+
+  .task-check.done::after {
+    content: '✓';
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+  }
+
+  .task-info { flex: 1; min-width: 0; }
+
+  .task-info .task-name {
+    font-weight: 500;
+    font-size: 0.88rem;
+    color: var(--text-dark);
+  }
+
+  .task-info .task-meta {
+    font-size: 0.72rem;
+    color: var(--text-light);
+    margin-top: 2px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .priority-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .priority-high { background: var(--rose); }
+  .priority-medium { background: var(--butter); }
+  .priority-low { background: var(--sage); }
+
+  .category-tag {
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 8px;
+    background: var(--lace);
+    color: var(--mauve);
+    border: 1px solid rgba(212,160,168,0.3);
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--text-light);
+    font-style: italic;
+    font-size: 0.85rem;
+  }
+
+  .empty-state::before {
+    content: '♡';
+    display: block;
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    opacity: 0.4;
+  }
+
+  /* Loading shimmer */
+  .loading-shimmer {
+    background: linear-gradient(90deg, var(--pearl) 25%, var(--lace) 50%, var(--pearl) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px;
+    height: 46px;
+    margin-bottom: 8px;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Bow decoration */
+  .bow {
+    display: inline-block;
+    position: relative;
+    width: 24px;
+    height: 12px;
+  }
+
+  .bow::before, .bow::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50% 50% 50% 0;
+    background: var(--blush);
+  }
+
+  .bow::before { left: 0; transform: rotate(-45deg); }
+  .bow::after { right: 0; transform: rotate(45deg) scaleX(-1); }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .grid { grid-template-columns: 1fr; }
+    .card-calendar { grid-column: 1; }
+    .header h1 { font-size: 1.8rem; }
+    .dashboard { padding: 20px 14px; }
+  }
+
+  /* Scroll */
+  .card-body.scrollable {
+    max-height: 340px;
+    overflow-y: auto;
+  }
+
+  .card-body.scrollable::-webkit-scrollbar { width: 4px; }
+  .card-body.scrollable::-webkit-scrollbar-track { background: transparent; }
+  .card-body.scrollable::-webkit-scrollbar-thumb { background: var(--blush); border-radius: 4px; }
+
+  .refresh-btn {
+    background: none;
+    border: 1px solid var(--soft-pink);
+    color: var(--text-light);
+    font-size: 0.7rem;
+    padding: 3px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .refresh-btn:hover {
+    background: var(--pearl);
+    color: var(--deep-rose);
+    border-color: var(--rose);
+  }
+</style>
+</head>
+<body>
+
+<div class="dashboard">
+  <header class="header">
+    <h1>Lizzie's <span>Life Manager</span> ♡</h1>
+    <div class="subtitle">keeping it all together, beautifully</div>
+    <div class="sync-status">
+      <div class="sync-dot" id="syncDot"></div>
+      <span id="syncText">Syncing with Airtable...</span>
+      <button class="refresh-btn" onclick="refreshAll()">refresh</button>
+    </div>
+  </header>
+
+  <!-- Calendar -->
+  <div class="grid">
+    <div class="card card-calendar">
+      <div class="card-header">
+        <h2><span class="icon">🗓</span> This Week</h2>
+        <span class="badge" id="weekRange"></span>
+      </div>
+      <div class="card-body">
+        <div class="calendar-grid" id="calendarGrid"></div>
+        <div style="display:flex; gap:16px; justify-content:center; margin-top:12px; padding-top:10px; border-top:1px solid rgba(248,196,212,0.2);">
+          <span style="display:flex;align-items:center;gap:5px;font-size:0.68rem;color:var(--text-light)"><span style="width:8px;height:8px;border-radius:3px;background:var(--rose);display:inline-block"></span> Appointments</span>
+          <span style="display:flex;align-items:center;gap:5px;font-size:0.68rem;color:var(--text-light)"><span style="width:8px;height:8px;border-radius:3px;background:var(--mauve);display:inline-block"></span> Tasks</span>
+          <span style="display:flex;align-items:center;gap:5px;font-size:0.68rem;color:var(--text-light)"><span style="width:8px;height:8px;border-radius:3px;background:var(--lavender);display:inline-block"></span> Class Work</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Doctor Appointments -->
+    <div class="card">
+      <div class="card-header">
+        <h2><span class="icon">🩺</span> Doctor Appointments</h2>
+        <span class="badge" id="apptCount">0</span>
+      </div>
+      <div class="card-body scrollable" id="apptList">
+        <div class="loading-shimmer"></div>
+        <div class="loading-shimmer"></div>
+        <div class="loading-shimmer"></div>
+      </div>
+    </div>
+
+    <!-- General Tasks -->
+    <div class="card">
+      <div class="card-header">
+        <h2><span class="icon">✧</span> My Tasks</h2>
+        <span class="badge" id="taskCount">0</span>
+      </div>
+      <div class="card-body scrollable" id="taskList">
+        <div class="loading-shimmer"></div>
+        <div class="loading-shimmer"></div>
+      </div>
+    </div>
+
+    <!-- Class Assignments -->
+    <div class="card" style="grid-column: 1 / -1;">
+      <div class="card-header">
+        <h2><span class="icon">📚</span> Class Assignments</h2>
+        <span class="badge" id="classCount">0</span>
+      </div>
+      <div class="card-body scrollable" id="classList">
+        <div class="loading-shimmer"></div>
+        <div class="loading-shimmer"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const BASE_ID = 'appoYAY87ApVe74NH';
+
+  const TABLES = {
+    appointments: 'appointments',
+    tasks: 'tasks',
+    classes: 'classes'
+  };
+
+  const FIELDS = {
+    appointments: {
+      name: 'fldmQIVtP60Wck9Pq',
+      dateTime: 'fld5vhy9VSh3gzTtH',
+      doctor: 'fldK34rzQGn7T0NKs',
+      type: 'fldEWuTLbZKnu2Wwp',
+      location: 'fldmKEznTfJQYyVKK',
+      status: 'fldwYB109tEq7nLQu',
+      notes: 'fldfp6gOkpJpDL7Cv'
+    },
+    tasks: {
+      name: 'fldk6OphWSvYXoNYJ',
+      dueDate: 'fldfea7bOlQK5TE0b',
+      priority: 'fldzrqF6ISwzI6qmT',
+      category: 'fldomczJ8lj4xRr97',
+      status: 'fldYR1Ftd47BS3DOd',
+      notes: 'fld9ZzSBewQrd7i6G',
+      completed: 'fldRKYOCp59dENISp'
+    },
+    classes: {
+      name: 'fldx4BAewNWPaBjKZ',
+      course: 'fldHLqS7HfP4OYeKL',
+      dueDate: 'fld4NhdLNHqEE18q0',
+      type: 'fldbinqAuEiTDAx1E',
+      status: 'fldTEwMYSFhSGb1xU',
+      priority: 'fld1FqLHhdD51Y0co',
+      hours: 'fldwBAsDLbIHyTuAO',
+      link: 'fldVQu2SHhSgOqT1t',
+      notes: 'fldyQF8uk9Y6sixyV'
+    }
+  };
+
+  // Data store
+  let data = { appointments: [], tasks: [], classes: [] };
+
+  // Fetch via Netlify serverless function (keeps token server-side)
+  async function fetchTable(tableName) {
+    const res = await fetch(`/.netlify/functions/airtable?table=${tableName}`);
+    if (!res.ok) throw new Error(`Proxy error: ${res.status}`);
+    const json = await res.json();
+    return json.records || [];
+  }
+
+  // Get field value helper
+  function fv(record, fieldId) {
+    return record.fields?.[fieldId] ?? null;
+  }
+
+  // Format date
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
+
+  function formatTime(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+  }
+
+  function getMonthDay(dateStr) {
+    if (!dateStr) return { month: '', day: '' };
+    const d = new Date(dateStr);
+    return {
+      month: d.toLocaleDateString('en-US', { month: 'short' }),
+      day: d.getDate()
+    };
+  }
+
+  // Status class
+  function statusClass(status) {
+    if (!status) return 'status-not-started';
+    const s = (typeof status === 'object' ? status.name : status).toLowerCase();
+    if (s.includes('scheduled') || s.includes('upcoming')) return 'status-scheduled';
+    if (s.includes('completed') || s.includes('done')) return 'status-completed';
+    if (s.includes('progress')) return 'status-in-progress';
+    return 'status-not-started';
+  }
+
+  function statusName(status) {
+    if (!status) return 'No Status';
+    return typeof status === 'object' ? status.name : status;
+  }
+
+  function selectName(val) {
+    if (!val) return '';
+    if (typeof val === 'object' && val.name) return val.name;
+    return val;
+  }
+
+  // Priority class
+  function priorityClass(p) {
+    if (!p) return 'priority-low';
+    const name = selectName(p).toLowerCase();
+    if (name.includes('high') || name.includes('urgent')) return 'priority-high';
+    if (name.includes('medium')) return 'priority-medium';
+    return 'priority-low';
+  }
+
+  // Build calendar
+  function buildCalendar(appointments, tasks, classes) {
+    const now = new Date();
+    const startOfWeek = new Date(now);
+    const dayOfWeek = now.getDay();
+    startOfWeek.setDate(now.getDate() - dayOfWeek);
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    endOfWeek.setHours(23, 59, 59, 999);
+
+    document.getElementById('weekRange').textContent =
+      `${startOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${endOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    let html = days.map(d => `<div class="cal-day-name">${d}</div>`).join('');
+
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(startOfWeek);
+      day.setDate(startOfWeek.getDate() + i);
+      const isToday = day.toDateString() === now.toDateString();
+
+      // Find appointments on this day
+      const dayAppts = appointments.filter(a => {
+        const dt = fv(a, FIELDS.appointments.dateTime);
+        if (!dt) return false;
+        return new Date(dt).toDateString() === day.toDateString();
+      });
+
+      // Find tasks due this day
+      const dayTasks = tasks.filter(t => {
+        const dt = fv(t, FIELDS.tasks.dueDate);
+        if (!dt) return false;
+        return new Date(dt).toDateString() === day.toDateString();
+      });
+
+      // Find class assignments due this day
+      const dayClasses = classes.filter(c => {
+        const dt = fv(c, FIELDS.classes.dueDate);
+        if (!dt) return false;
+        return new Date(dt).toDateString() === day.toDateString();
+      });
+
+      const hasItems = dayAppts.length > 0 || dayTasks.length > 0 || dayClasses.length > 0;
+      const cls = ['cal-day', isToday ? 'today' : '', hasItems ? 'has-appt' : ''].filter(Boolean).join(' ');
+
+      let dots = '';
+
+      // Appointment dots
+      dots += dayAppts.map(a => {
+        const time = formatTime(fv(a, FIELDS.appointments.dateTime));
+        const doctor = fv(a, FIELDS.appointments.doctor) || '';
+        return `<div class="appt-dot dot-appt" title="${doctor} at ${time}">🩺 ${time}</div>`;
+      }).join('');
+
+      // Task dots
+      dots += dayTasks.map(t => {
+        const name = fv(t, FIELDS.tasks.name) || 'Task';
+        const short = name.length > 12 ? name.slice(0, 12) + '…' : name;
+        return `<div class="appt-dot dot-task" title="${name}">✧ ${short}</div>`;
+      }).join('');
+
+      // Class assignment dots
+      dots += dayClasses.map(c => {
+        const name = fv(c, FIELDS.classes.name) || 'Assignment';
+        const short = name.length > 12 ? name.slice(0, 12) + '…' : name;
+        return `<div class="appt-dot dot-class" title="${name}">📚 ${short}</div>`;
+      }).join('');
+
+      html += `<div class="${cls}"><span class="day-num">${day.getDate()}</span>${dots}</div>`;
+    }
+
+    document.getElementById('calendarGrid').innerHTML = html;
+  }
+
+  // Render appointments
+  function renderAppointments(records) {
+    const el = document.getElementById('apptList');
+    document.getElementById('apptCount').textContent = records.length;
+
+    if (!records.length) {
+      el.innerHTML = '<div class="empty-state">No upcoming appointments</div>';
+      return;
+    }
+
+    // Sort by date
+    records.sort((a, b) => {
+      const da = fv(a, FIELDS.appointments.dateTime) || '';
+      const db = fv(b, FIELDS.appointments.dateTime) || '';
+      return new Date(da) - new Date(db);
+    });
+
+    el.innerHTML = records.map(r => {
+      const { month, day } = getMonthDay(fv(r, FIELDS.appointments.dateTime));
+      const name = fv(r, FIELDS.appointments.name) || 'Appointment';
+      const doctor = fv(r, FIELDS.appointments.doctor) || '';
+      const location = fv(r, FIELDS.appointments.location) || '';
+      const time = formatTime(fv(r, FIELDS.appointments.dateTime));
+      const status = fv(r, FIELDS.appointments.status);
+      const type = fv(r, FIELDS.appointments.type);
+
+      return `
+        <div class="appt-item">
+          <div class="appt-date-badge">
+            <span class="month">${month}</span>
+            <span class="day">${day}</span>
+          </div>
+          <div class="appt-info">
+            <div class="name">${selectName(type) || 'Appointment'} – ${doctor.split(',')[0]}</div>
+            <div class="doctor">${doctor}</div>
+            <div class="location">${location}</div>
+            <div class="time">♡ ${time}</div>
+          </div>
+          <span class="status-pill ${statusClass(status)}">${statusName(status)}</span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Render tasks
+  function renderTasks(records) {
+    const el = document.getElementById('taskList');
+    document.getElementById('taskCount').textContent = records.length;
+
+    if (!records.length) {
+      el.innerHTML = '<div class="empty-state">No tasks right now — free time!</div>';
+      return;
+    }
+
+    el.innerHTML = records.map(r => {
+      const name = fv(r, FIELDS.tasks.name) || 'Task';
+      const dueDate = fv(r, FIELDS.tasks.dueDate);
+      const priority = fv(r, FIELDS.tasks.priority);
+      const categories = fv(r, FIELDS.tasks.category) || [];
+      const status = fv(r, FIELDS.tasks.status);
+      const completed = fv(r, FIELDS.tasks.completed);
+
+      const cats = (Array.isArray(categories) ? categories : [categories])
+        .map(c => `<span class="category-tag">${selectName(c)}</span>`).join('');
+
+      return `
+        <div class="task-item">
+          <div class="task-check ${completed ? 'done' : ''}"></div>
+          <div class="task-info">
+            <div class="task-name">${name}</div>
+            <div class="task-meta">
+              ${priority ? `<span><span class="priority-dot ${priorityClass(priority)}"></span> ${selectName(priority)}</span>` : ''}
+              ${dueDate ? `<span>Due ${formatDate(dueDate)}</span>` : ''}
+              ${statusName(status) !== 'No Status' ? `<span>${statusName(status)}</span>` : ''}
+            </div>
+            ${cats ? `<div style="margin-top:4px">${cats}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Render class assignments
+  function renderClasses(records) {
+    const el = document.getElementById('classList');
+    document.getElementById('classCount').textContent = records.length;
+
+    if (!records.length) {
+      el.innerHTML = '<div class="empty-state">No class assignments yet</div>';
+      return;
+    }
+
+    el.innerHTML = records.map(r => {
+      const name = fv(r, FIELDS.classes.name) || 'Assignment';
+      const course = fv(r, FIELDS.classes.course) || '';
+      const dueDate = fv(r, FIELDS.classes.dueDate);
+      const type = fv(r, FIELDS.classes.type);
+      const status = fv(r, FIELDS.classes.status);
+      const priority = fv(r, FIELDS.classes.priority);
+      const hours = fv(r, FIELDS.classes.hours);
+
+      return `
+        <div class="task-item">
+          <div class="task-check ${statusName(status).toLowerCase().includes('done') || statusName(status).toLowerCase().includes('completed') ? 'done' : ''}"></div>
+          <div class="task-info">
+            <div class="task-name">${name}</div>
+            <div class="task-meta">
+              ${course ? `<span class="category-tag">${course}</span>` : ''}
+              ${type ? `<span>${selectName(type)}</span>` : ''}
+              ${dueDate ? `<span>Due ${formatDate(dueDate)}</span>` : ''}
+              ${priority ? `<span><span class="priority-dot ${priorityClass(priority)}"></span> ${selectName(priority)}</span>` : ''}
+              ${hours ? `<span>~${hours}h</span>` : ''}
+              ${statusName(status) !== 'No Status' ? `<span>${statusName(status)}</span>` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Sync status
+  function setSyncStatus(state, text) {
+    const dot = document.getElementById('syncDot');
+    const txt = document.getElementById('syncText');
+    dot.className = 'sync-dot' + (state === 'syncing' ? ' syncing' : state === 'error' ? ' error' : '');
+    txt.textContent = text;
+  }
+
+  // Fetch all
+  async function refreshAll() {
+    setSyncStatus('syncing', 'Syncing with Airtable...');
+
+    try {
+      const [appts, tasks, classes] = await Promise.all([
+        fetchTable(TABLES.appointments),
+        fetchTable(TABLES.tasks),
+        fetchTable(TABLES.classes)
+      ]);
+
+      data.appointments = appts;
+      data.tasks = tasks;
+      data.classes = classes;
+
+      buildCalendar(appts, tasks, classes);
+      renderAppointments(appts);
+      renderTasks(tasks);
+      renderClasses(classes);
+
+      const now = new Date();
+      setSyncStatus('ok', `Last synced ${now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`);
+    } catch (err) {
+      console.error('Sync error:', err);
+      setSyncStatus('error', 'Sync failed — tap refresh');
+    }
+  }
+
+  // Initial load
+  refreshAll();
+
+  // Auto-sync every 30 seconds
+  setInterval(refreshAll, 30000);
+</script>
+
+</body>
+</html>
