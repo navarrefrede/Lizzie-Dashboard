@@ -572,11 +572,13 @@
 
 <script>
   const BASE_ID = 'appoYAY87ApVe74NH';
+  const PAT = 'pat9lri6d1F9VG7NP';
+  const API = `https://api.airtable.com/v0/${BASE_ID}`;
 
   const TABLES = {
-    appointments: 'appointments',
-    tasks: 'tasks',
-    classes: 'classes'
+    appointments: 'tblYoE6gqRzz8HXzh',
+    tasks: 'tblpvGShoT1jSFiYA',
+    classes: 'tblFjSCv9YnACEd4q'
   };
 
   const FIELDS = {
@@ -614,10 +616,16 @@
   // Data store
   let data = { appointments: [], tasks: [], classes: [] };
 
-  // Fetch via Netlify serverless function (keeps token server-side)
-  async function fetchTable(tableName) {
-    const res = await fetch(`/.netlify/functions/airtable?table=${tableName}`);
-    if (!res.ok) throw new Error(`Proxy error: ${res.status}`);
+  // Fetch directly from Airtable API (supports CORS with Bearer token)
+  async function fetchTable(tableId) {
+    const res = await fetch(`${API}/${tableId}`, {
+      headers: { 'Authorization': `Bearer ${PAT}` }
+    });
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error(`Airtable error ${res.status} for ${tableId}:`, errText);
+      throw new Error(`Airtable error: ${res.status}`);
+    }
     const json = await res.json();
     return json.records || [];
   }
