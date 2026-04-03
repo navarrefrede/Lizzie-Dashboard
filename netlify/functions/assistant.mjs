@@ -4,7 +4,7 @@ export default async (req) => {
   }
 
   // All env vars read inside handler per Netlify guidelines
-  const anthropicKey = Netlify.env.get("ANTHROPIC_API_KEY");
+  const anthropicKey = (Netlify.env.get("ANTHROPIC_API_KEY") || "").trim();
   const airtableKey  = Netlify.env.get("AIRTABLE_PAT");
 
   if (!anthropicKey) {
@@ -61,7 +61,7 @@ Field formats:
 - create_appointment: { name (required), dateTime ("ISO 8601" or null), doctor (string|null), location (string|null), type (string|null), status ("Scheduled"|null), bookingNotes (string|null) }
 - create_class: { name (required), course (string|null), dueDate ("YYYY-MM-DD" or null), type (string|null), priority ("High"|"Medium"|"Low"|null), notes (string|null) }
 
-For casual chat or questions (no action needed), reply with plain text only — no JSON.
+For casual chat or questions (no action needed), reply with plain text only â no JSON.
 Keep replies warm and personal. You're talking to Lizzie.`;
 
   // Call Claude
@@ -75,7 +75,7 @@ Keep replies warm and personal. You're talking to Lizzie.`;
         "anthropic-version": "2023-06-01"
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
+        model: "claude-sonnet-4-5",
         max_tokens: 1000,
         system: systemPrompt,
         messages: [{ role: "user", content: message }],
@@ -101,7 +101,7 @@ Keep replies warm and personal. You're talking to Lizzie.`;
       parsed = JSON.parse(cleaned);
     }
   } catch {
-    // Not JSON — plain text reply
+    // Not JSON â plain text reply
   }
 
   if (!parsed || !parsed.action) {
@@ -133,7 +133,7 @@ Keep replies warm and personal. You're talking to Lizzie.`;
     if (d.bookingNotes) fields[FIELDS.appointments.bookingNotes] = d.bookingNotes;
 
   } else if (parsed.action === "create_class") {
-    tableId = TABLES.classes;
+    tableB = TABLES.classes;
     if (d.name)     fields[FIELDS.classes.name]     = d.name;
     if (d.course)   fields[FIELDS.classes.course]   = d.course;
     if (d.dueDate)  fields[FIELDS.classes.dueDate]  = d.dueDate;
