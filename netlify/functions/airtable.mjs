@@ -15,8 +15,8 @@ export default async (req, context) => {
     classes: "tblFjSCv9YnACEd4q",
   };
 
-  /* ── PATCH: update a single record ── */
-  if (req.method === "PATCH") {
+  /* ── POST/PATCH: update a single record ── */
+  if (req.method === "POST" || req.method === "PATCH") {
     let body;
     try {
       body = await req.json();
