@@ -927,7 +927,7 @@
     hint.textContent = '✦ Thinking...';
 
     try {
-      const res = await fetch('/api/assistant', {
+      const res = await fetch('/.netlify/functions/assistant', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ message: msg })
