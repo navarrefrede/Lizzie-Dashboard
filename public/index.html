@@ -629,7 +629,7 @@
   }
   async function patchRecord(table, id, fields) {
     const r = await fetch('/.netlify/functions/airtable', {
-      method: 'PATCH',
+      method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({table, recordId: id, fields})
     });
