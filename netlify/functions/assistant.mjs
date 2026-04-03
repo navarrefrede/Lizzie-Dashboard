@@ -133,7 +133,7 @@ Keep replies warm and personal. You're talking to Lizzie.`;
     if (d.bookingNotes) fields[FIELDS.appointments.bookingNotes] = d.bookingNotes;
 
   } else if (parsed.action === "create_class") {
-    tableB = TABLES.classes;
+    tableB = TABLES.classes;
     if (d.name)     fields[FIELDS.classes.name]     = d.name;
     if (d.course)   fields[FIELDS.classes.course]   = d.course;
     if (d.dueDate)  fields[FIELDS.classes.dueDate]  = d.dueDate;
