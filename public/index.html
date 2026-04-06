@@ -207,7 +207,9 @@
   .appt-info .name { font-weight: 600; font-size: 0.88rem; color: var(--text-dark); margin-bottom: 2px; }
   .appt-item.past .appt-info .name { color: var(--text-medium); }
   .appt-info .doctor   { font-size: 0.78rem; color: var(--text-medium); }
-  .appt-info .location { font-size: 0.72rem; color: var(--text-light); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .appt-info .specialty { font-size: 0.72rem; color: var(--mauve); font-style: italic; margin-top: 1px; }
+  .appt-info .location { font-size: 0.72rem; color: var(--rose); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none; display: block; }
+  .appt-info .location:hover { text-decoration: underline; color: var(--deep-rose); }
   .appt-info .time     { display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem; color: var(--deep-rose); font-weight: 500; margin-top: 4px; background: var(--pearl); padding: 2px 8px; border-radius: 8px; }
   .appt-item.past .appt-info .time { color: var(--text-light); background: #f5f0f1; }
   .appt-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
@@ -562,6 +564,7 @@
       status:       'fldwYB109tEq7nLQu',
       bookingNotes: 'fldfp6gOkpJpDL7Cv',
       apptNotes:    'fldMKYsvekEleEYr5',
+      doctorType:   'fldBpzbcaYaJwCwrj',
     },
     tasks: {
       name:      'fldk6OphWSvYXoNYJ',
@@ -598,6 +601,10 @@
     const d = new Date(s);
     return { month: d.toLocaleDateString('en-US',{month:'short'}), day: d.getDate() };
   }
+  function mapsUrl(location) {
+    if (!location) return null;
+    return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(location);
+  }
   function sClass(status) {
     const s = sel(status).toLowerCase();
     if (!s) return 'status-not-started';
@@ -608,6 +615,7 @@
     return 'status-not-started';
   }
   function sName(status) { return sel(status) || 'No Status'; }
+  function isCancelled(status) { return sel(status).toLowerCase().includes('cancel'); }
   function prioClass(p) {
     const n = sel(p).toLowerCase();
     if (n.includes('high')||n.includes('urgent')) return 'priority-high';
@@ -709,11 +717,22 @@
     const now = new Date();
     document.getElementById('apptCount').textContent = records.length;
 
+    // Scheduled: future date AND not cancelled
     const scheduled = records
-      .filter(r => { const dt=fv(r,FIELDS.appointments.dateTime); return !dt || new Date(dt) >= now; })
+      .filter(r => {
+        const dt = fv(r, FIELDS.appointments.dateTime);
+        const cancelled = isCancelled(fv(r, FIELDS.appointments.status));
+        return !cancelled && (!dt || new Date(dt) >= now);
+      })
       .sort((a,b) => new Date(fv(a,FIELDS.appointments.dateTime)||0) - new Date(fv(b,FIELDS.appointments.dateTime)||0));
+
+    // Past: past date OR cancelled
     const past = records
-      .filter(r => { const dt=fv(r,FIELDS.appointments.dateTime); return dt && new Date(dt) < now; })
+      .filter(r => {
+        const dt = fv(r, FIELDS.appointments.dateTime);
+        const cancelled = isCancelled(fv(r, FIELDS.appointments.status));
+        return cancelled || (dt && new Date(dt) < now);
+      })
       .sort((a,b) => new Date(fv(b,FIELDS.appointments.dateTime)||0) - new Date(fv(a,FIELDS.appointments.dateTime)||0));
 
     const showing = apptTab === 'scheduled' ? scheduled : past;
@@ -724,16 +743,18 @@
 
     el.innerHTML = showing.map(r => {
       const {month,day} = monthDay(fv(r,FIELDS.appointments.dateTime));
-      const name     = fv(r,FIELDS.appointments.name)||'Appointment';
-      const doctor   = fv(r,FIELDS.appointments.doctor)||'';
-      const location = fv(r,FIELDS.appointments.location)||'';
-      const time     = fmtTime(fv(r,FIELDS.appointments.dateTime));
-      const status   = fv(r,FIELDS.appointments.status);
-      const type     = fv(r,FIELDS.appointments.type);
-      const isPast   = apptTab === 'past';
+      const name       = fv(r,FIELDS.appointments.name)||'Appointment';
+      const doctor     = fv(r,FIELDS.appointments.doctor)||'';
+      const location   = fv(r,FIELDS.appointments.location)||'';
+      const specialty  = sel(fv(r,FIELDS.appointments.doctorType))||'';
+      const time       = fmtTime(fv(r,FIELDS.appointments.dateTime));
+      const status     = fv(r,FIELDS.appointments.status);
+      const type       = fv(r,FIELDS.appointments.type);
+      const isPast     = apptTab === 'past';
       const notesText  = isPast ? (fv(r,FIELDS.appointments.apptNotes)||'') : (fv(r,FIELDS.appointments.bookingNotes)||'');
       const notesLabel = isPast ? 'Appointment Notes' : 'Booking Notes';
       const hasNotes   = notesText.trim().length > 0;
+      const mapUrl     = mapsUrl(location);
 
       return `
         <div class="appt-item${isPast?' past':''}" onclick="${hasNotes?'toggleAppt(this)':''}">
@@ -741,9 +762,10 @@
             <div class="appt-date-badge"><span class="month">${month}</span><span class="day">${day}</span></div>
             <div class="appt-info">
               <div class="name">${esc(sel(type)||name)}${doctor?' – '+esc(doctor.split(',')[0]):''}</div>
-              ${doctor   ? `<div class="doctor">${esc(doctor)}</div>` : ''}
-              ${location ? `<div class="location">📍 ${esc(location)}</div>` : ''}
-              ${time     ? `<div class="time">♡ ${time}</div>` : ''}
+              ${doctor    ? `<div class="doctor">${esc(doctor)}</div>` : ''}
+              ${specialty ? `<div class="specialty">✦ ${esc(specialty)}</div>` : ''}
+              ${location  ? `<a class="location" href="${esc(mapUrl)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📍 ${esc(location)}</a>` : ''}
+              ${time      ? `<div class="time">♡ ${time}</div>` : ''}
             </div>
             <div class="appt-right">
               <span class="status-pill ${sClass(status)}">${sName(status)}</span>
@@ -1029,7 +1051,7 @@
 <div class="chat-bar">
   <input class="chat-input" id="chatInput" type="text"
     placeholder="e.g. Add a task to call the doctor by Friday..."
-    onkeydown="if(event.key===&apos;Enter&apos;)sendChat()" />
+    onkeydown="if(event.key==='Enter')sendChat()" />
   <button class="chat-mic" id="chatMic" onclick="toggleVoice()" title="Voice input">🎤</button>
   <button class="chat-send" id="chatSend" onclick="sendChat()" title="Send">♡</button>
 </div>
